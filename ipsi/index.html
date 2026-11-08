@@ -281,8 +281,17 @@ td.cs b{font-weight:600}
 .ov-head h2{margin:0}
 .ov-head a{font-size:12.5px;color:var(--accent);text-decoration:none}
 .ov-head a:hover{text-decoration:underline}
-.ovkv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
-@media (max-width:900px){.ovkv{grid-template-columns:1fr}}
+.ovkv{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;margin-bottom:12px;align-items:stretch}
+.ovkv .ovadv{grid-column:1/-1}
+.ovsign{display:grid;place-items:center;align-content:center;gap:6px;min-width:64px}
+.ovsign .sg{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-size:34px;font-weight:700;line-height:1;background:var(--accent);color:var(--surface);box-shadow:var(--shadow)}
+.ovsign .sg.q{background:var(--surface-2);color:var(--ink-3);font-size:26px}
+.ovsign small{font-size:12px;font-weight:700;color:var(--accent);white-space:nowrap}
+.ovsign .sgm{display:none}
+@media (max-width:640px){.ovkv{grid-template-columns:1fr}
+  .ovsign{grid-template-columns:auto auto;justify-content:center;gap:10px}
+  .ovsign .sg{display:none}.ovsign .sgm{display:inline-block;font-size:17px;font-weight:700;background:var(--accent);color:var(--surface);border-radius:999px;padding:6px 18px}
+  .ovsign small{display:none}}
 .ovadv{display:grid;gap:10px;align-content:start;min-width:0;padding:12px 14px;border:2px solid var(--accent);border-radius:12px;background:var(--accent-soft)}
 .ovadv h3{margin:0;font-family:var(--f-display);font-size:17px;color:var(--accent)}
 .ovadv .verdict{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -1521,13 +1530,17 @@ $("sh-rural").addEventListener("click",function(e){var b=e.target.closest("butto
 function text(id){var el=$(id);return el?el.innerText:"";}
 function subjRow(){var tb=$("j-conv");if(!tb)return "";var out=[];[].forEach.call(tb.querySelectorAll("tr"),function(tr){var c=tr.children;if(c.length<5||tr.classList.contains("tot"))return;var nm=c[0].textContent.trim(),pct=c[3].textContent.trim(),g=c[4].textContent.trim().replace(/[^0-9]/g,"");if(!nm)return;
     if(nm.indexOf("영어")===0){var bs=c[4].querySelectorAll(".badge");["영어","한국사"].forEach(function(n,i){var gg=bs[i]?bs[i].textContent.trim():"";out.push('<span class="sj"><em>'+n+'</em><b class="badge '+(gg?(+gg<=2?"g1":+gg<=4?"g3":"g5"):"")+'">'+(gg?gg+"등급":"–")+'</b><small>절대</small></span>');});return;}var gc=g?(+g<=2?"g1":+g<=4?"g3":"g5"):"";out.push('<span class="sj"><em>'+nm+'</em><b class="badge '+gc+'">'+(g?g+"등급":"–")+'</b><small>'+(pct&&pct!=="–"?pct:"")+'</small></span>');});return out.join("");}
-function advHtml(){
-  var A=null;try{A=window.SUSI&&window.SUSI.advice?window.SUSI.advice():null;}catch(e){A=null;}
+function signHtml(A){
+  if(!A||A.jTop==null)return '<div class="ovsign" aria-label="판정 전"><span class="sg q">?</span><span class="sgm">수시 ? 정시</span></div>';
+  var s={susi:">",even:"≈",jungsi:"<"}[A.mode],t={susi:"수시 유리",even:"비슷",jungsi:"정시 유리"}[A.mode];
+  return '<div class="ovsign" aria-label="'+t+'"><span class="sg">'+s+'</span><span class="sgm">수시 '+s+' 정시</span><small>'+t+'</small></div>';
+}
+function advHtml(A){
   var h='<div class="ovadv"><h3>수시·정시 어느 쪽이 유리할까</h3>';
   if(!A)return h+'<p class="advnote">수시 탭에 내신을 넣으면 판정합니다.</p></div>';
   if(A.jTop==null)return h+'<p class="advnote">정시 탭에 모의고사 점수를 넣으면 판정합니다.</p></div>';
   var V={jungsi:"정시 유리",even:"수시·정시 비슷",susi:"수시 유리"}[A.mode];
-  h+='<div class="verdict"><span class="vpill">'+V+'</span><span class="vnum">내신 상위 약 <b>'+Math.round(A.sTop)+'%</b> · 정시 상위 약 <b>'+Math.round(A.jTop)+'%</b></span></div>';
+  h+='<div class="verdict"><span class="vnum">내신 상위 약 <b>'+Math.round(A.sTop)+'%</b> · 정시 상위 약 <b>'+Math.round(A.jTop)+'%</b></span></div>';
   var o1=A.mode==="jungsi"?"정시가 내신보다 경쟁력이 있습니다. 수능 공부를 중심에 두고, 수시는 정시로 갈 수 있는 대학보다 높은 곳만 쓰세요."
         :A.mode==="even"?"수시와 정시가 비슷한 수준입니다. 정시를 함께 준비하면 정시가 받쳐 주므로 수시 6장을 더 높게 잡을 수 있습니다."
         :"지금은 정시가 내신보다 약합니다. 정시는 최저를 맞추는 정도로만 준비하는 편이 낫습니다.";
@@ -1554,12 +1567,13 @@ function overview(){
   $("ov-who").innerHTML=who?who.innerHTML:"";
   var a5=avg?avg.firstChild.textContent:"–",a9=avg9?(avg9.textContent.match(/약 ([\d.]+)/)||[])[1]:null,ja=javg?javg.firstChild.textContent:"–";
   var exam=J&&J.exam?({jun:"6월",sep:"9월",oct:"10월"})[J.exam]:"";
+  var ADV=null;try{ADV=window.SUSI&&window.SUSI.advice?window.SUSI.advice():null;}catch(e){ADV=null;}
   $("ov-kv").innerHTML='<div class="ovcol"><h3>수시</h3><div class="ovbox"><span>내신 (5등급제 · 국영수사)</span><b>'+a5+'</b> <small>9등급 약 '+(a9||"–")+'</small></div>'+
     '<div class="ovbox"><span>판정 분포</span><div class="counts">'+(sc?sc.innerHTML:"")+'</div></div></div>'+
-    advHtml()+
+    signHtml(ADV)+
     '<div class="ovcol"><h3>정시</h3><div class="ovbox"><span>국·수·탐 백분위 평균 ('+exam+' 학평'+(J&&+J.adj?" · 보정 "+J.adj:"")+')</span><b>'+ja+'</b></div>'+
     '<div class="ovbox"><span>과목별 등급 · 백분위</span><div class="subjrow">'+subjRow()+'</div></div>'+
-    '<div class="ovbox"><span>판정 분포</span><div class="counts">'+(jc?jc.innerHTML:"")+'</div></div></div>';
+    '<div class="ovbox"><span>판정 분포</span><div class="counts">'+(jc?jc.innerHTML:"")+'</div></div></div>'+advHtml(ADV);
 }
 var mo=new MutationObserver(function(){overview();});
 ["s-six","j-gun","s-counts","j-counts","s-avg","j-conv"].forEach(function(id){var el=$(id);if(el)mo.observe(el,{childList:true,subtree:true,characterData:true});});
