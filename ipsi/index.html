@@ -265,6 +265,7 @@ td.cs b{font-weight:600}
 .slot.sj0 .smin,.slot.sj1 .smin{background:#FFF4CC;color:#5A4200}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .smin{background:#3A2E05;color:#F2D27A}}
 :root[data-theme="dark"] .smin{background:#3A2E05;color:#F2D27A}
+[id$="mockg"] select:disabled{opacity:1;color:var(--ink);background:var(--surface-2);cursor:not-allowed}
 
 /* ---- 통합 ---- */
 .modes button{font:inherit;font-size:14px;padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
@@ -394,8 +395,7 @@ td.cs b{font-weight:600}
           <span class="flabel">수능 최저 판정용 모의고사 등급</span>
           <p class="hint" id="s-mocksrc"></p>
           <div class="mockg" id="s-mockg"></div>
-          <div class="actions" style="margin-top:0"><button type="button" class="btn" id="s-mockload">정시 시뮬 점수 불러오기</button></div>
-          <label class="mini" for="s-adj">학평 → 수능 보정 (불러올 때 적용)
+          <label class="mini" for="s-adj">수능은 학평보다 어렵게 보고 싶을 때 (선택)
             <select id="s-adj"><option value="0">보정 없음</option><option value="-2">백분위 −2</option><option value="-3">백분위 −3 (권장)</option><option value="-5">백분위 −5</option></select></label>
         </div>
 
@@ -1040,11 +1040,12 @@ var TYPN=["교과","종합","논술"];
 var REGN=["서울","경기·인천","충청·세종","강원","지방거점·기타"];
 var JA={"IT·컴퓨터":1,"공학":1,"자연과학":1,"의약":1,"간호/보건":1};
 var EXAMPLE={name:"",grade:"g2",rural:0,sem:{"1-1":{a:2.3,s:2.1,c:2.5},"1-2":{a:2.2,s:2.0,c:2.4},"2-1":{a:2.1,s:1.9,c:2.3}},basis:"auto",
-  mock:{K:3,M:4,E:2,C:3,S:4,H:3},mockSrc:"ex",adj:-3,typs:[0,1,2],cats:["경영·경제"],grps:[10],kw:"",regs:[0,1,2],jf:[],scope:"near",nsf:"all",targets:[],ptarget:"",calc:[["국어",4,2],["수학",4,3],["영어",4,2],["사회",3,1],["과학",3,3]],calcsem:"2-1"};
+  mock:{K:3,M:4,E:2,C:3,S:4,H:3},mockSrc:"ex",adj:0,adjV:2,typs:[0,1,2],cats:["경영·경제"],grps:[10],kw:"",regs:[0,1,2],jf:[],scope:"near",nsf:"all",targets:[],ptarget:"",calc:[["국어",4,2],["수학",4,3],["영어",4,2],["사회",3,1],["과학",3,3]],calcsem:"2-1"};
 var KEY="allcare_susi_sim_v1",KEY28="allcare_jungsi28_sim_v1";
 function load(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
 var st=load(KEY),fresh=false;
 if(!st||!st.sem||!st.grade){st=JSON.parse(JSON.stringify(EXAMPLE));fresh=true;}
+if(st.adjV!==2){st.adj=0;st.adjV=2;}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
 var isExample=function(){return !st.name&&JSON.stringify(st.sem)===JSON.stringify(EXAMPLE.sem);};
 
@@ -1186,14 +1187,14 @@ function buildMock(){
   var box=$("mockg");box.innerHTML="";
   [["K","국어"],["M","수학"],["E","영어"],["C","통합사회"],["S","통합과학"],["H","한국사"]].forEach(function(a){
     var l=document.createElement("label");l.htmlFor="mk"+a[0];
-    l.innerHTML=a[1]+'<select id="mk'+a[0]+'"><option value="">–</option>'+[1,2,3,4,5,6,7,8,9].map(function(g){return '<option value="'+g+'"'+(st.mock[a[0]]==g?" selected":"")+'>'+g+'</option>';}).join("")+'</select>';
+    var lock=(st.mockSrc||"").indexOf("jungsi:")===0;l.innerHTML=a[1]+'<select id="mk'+a[0]+'"'+(lock?' disabled title="정시 탭 점수에서 자동으로 들어갑니다"':'')+'><option value="">–</option>'+[1,2,3,4,5,6,7,8,9].map(function(g){return '<option value="'+g+'"'+(st.mock[a[0]]==g?" selected":"")+'>'+g+'</option>';}).join("")+'</select>';
     box.appendChild(l);
     l.querySelector("select").addEventListener("change",function(e){st.mock[a[0]]=e.target.value===""?null:+e.target.value;st.mockSrc="me";render(true);});
   });
 }
 function doImport(silent){
   var j=fromJungsi();
-  if(!j){if(!silent)$("mocksrc").textContent="이 기기에 정시 시뮬 점수가 없습니다. 등급을 직접 고르세요.";return false;}
+  if(!j){if((st.mockSrc||"").indexOf("jungsi:")===0){st.mockSrc="me";buildMock();}return false;}
   st.mock=j.g;st.mockSrc="jungsi:"+j.grade+":"+j.exam;
   if(!st.name&&j.name)st.name=j.name;
   if(fresh&&j.grade)st.grade=j.grade;
@@ -1253,7 +1254,7 @@ function render(soft){
   });
   $("semmsg").innerHTML=msgs.length?msgs.map(function(m){return "<span>"+m+"</span>";}).join("<br>"):"";
   var ms=st.mockSrc||"";
-  $("mocksrc").textContent=ms.indexOf("jungsi:")===0?("정시 시뮬의 "+(ms.split(":")[1]==="g1"?"고1 ":"고2 ")+EXN[ms.split(":")[2]]+" 학평 점수로 채웠습니다(보정 "+st.adj+"). 바꾸면 그 값으로 판정합니다."):ms==="ex"?"예시 등급입니다. 내 모의고사 등급으로 바꾸거나 정시 시뮬 점수를 불러오세요.":"직접 고른 등급입니다.";
+  $("mocksrc").textContent=ms.indexOf("jungsi:")===0?("정시 탭에 넣은 "+(ms.split(":")[1]==="g1"?"고1 ":"고2 ")+EXN[ms.split(":")[2]]+" 학평 점수에서 자동으로 들어갑니다"+(+st.adj?"(백분위 "+st.adj+" 보정)":"")+". 바꾸려면 정시 탭에서 점수를 고치세요."):ms==="ex"?"예시 등급입니다. 정시 탭에 모의고사 점수를 넣으면 자동으로 바뀝니다.":"정시 탭에 점수가 없어 직접 고른 등급입니다. 정시 탭에 점수를 넣으면 자동으로 바뀝니다.";
   save();
   // 내 위치
   var a=semAvg("a"),s=semAvg("s"),c=semAvg("c");
@@ -1418,8 +1419,7 @@ $("calcapply").addEventListener("click",function(){var c=calcAvg();if(c.a==null)
 $("name").addEventListener("input",function(e){st.name=e.target.value;render(true);});
 $("kw").addEventListener("input",function(e){st.kw=e.target.value;render(true);});
 $("basis").addEventListener("change",function(e){st.basis=e.target.value;render(true);});
-$("adj").addEventListener("change",function(e){st.adj=+e.target.value;if((st.mockSrc||"").indexOf("jungsi:")===0)doImport(true);render(true);});
-$("mockload").addEventListener("click",function(){if(doImport(false))render();});
+$("adj").addEventListener("change",function(e){st.adj=+e.target.value;doImport(true);render(true);});
 $("ptarget").addEventListener("change",function(e){st.ptarget=e.target.value;save();renderPlan(BYK[e.target.value]);});
 document.getElementById("app-susi").addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".star");if(!b)return;toggle(st.targets,b.dataset.k);st.ptarget=b.dataset.k;render(true);});
 $("reset").addEventListener("click",function(){st=JSON.parse(JSON.stringify(EXAMPLE));buildSem();buildMock();buildCalc();render();});
@@ -1435,9 +1435,9 @@ $("copy").addEventListener("click",function(){
   try{navigator.clipboard.writeText(txt).then(done,function(){fallback(txt);});}catch(err){fallback(txt);}
   function fallback(t){var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done();}catch(e){}ta.remove();}
 });
-if(st.mockSrc!=="me")doImport(true);
+doImport(true);
 buildSem();buildMock();buildCalc();render();
-window.SUSI={get:function(){return st;},reimport:function(){if(st.mockSrc!=="me")doImport(true);render(true);}};
+window.SUSI={get:function(){return st;},reimport:function(){doImport(true);render(true);}};
 })();
 </script>
 <script>
