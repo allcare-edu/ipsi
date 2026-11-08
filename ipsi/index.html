@@ -302,7 +302,9 @@ td.cs b{font-weight:600}
 .advopts{display:grid;gap:6px;margin:0;padding:0;list-style:none}
 .advopts li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;color:var(--ink-3);line-height:1.55}
 .advopts li b{display:block;font-size:14px;color:var(--ink-2)}
-.advopts li.on{border:2px solid var(--accent);color:var(--ink-2)}
+.advopts li:not(.on){background:var(--surface-2);border-color:transparent;color:var(--ink-3);opacity:.55;filter:grayscale(1)}
+.advopts li:not(.on) b{color:var(--ink-3)}
+.advopts li.on{border:2px solid var(--accent);color:var(--ink);background:var(--surface);box-shadow:0 0 0 4px rgba(38,57,140,.12)}
 .advopts li.on b{color:var(--ink)}
 .advopts li.on b::after{content:"추천";font-size:11px;font-weight:700;color:var(--surface);background:var(--accent);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:1px}
 .engbox{background:#FFF6D6;border:1.5px solid #D9A400;border-radius:10px;padding:8px 10px;font-size:13px;color:#4A3800;line-height:1.6}
@@ -316,6 +318,8 @@ td.cs b{font-weight:600}
 .ex2i b::after{content:none!important}
 .ex2i em{font-style:normal;font-weight:700;color:var(--accent)}
 .ex2i .pill{font-size:11px;padding:1px 7px}
+.advopts li b.uni2{display:inline;font-size:13px;color:var(--ink)}
+.advopts li.on b.uni2::after{content:none}
 .advnote{font-size:11.5px;color:var(--ink-3);margin:0}
 .ovcol{display:grid;gap:8px;align-content:start;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 .ovcol h3{margin:0;font-family:var(--f-display);font-size:17px;color:var(--accent)}
@@ -738,7 +742,7 @@ td.cs b{font-weight:600}
 "use strict";
 var D=DATA_J, C=D.cuts;
 var $=function(id){return document.getElementById("j-"+id);};
-window.JUNGSI={get:function(){return st;},seoul:function(){var R=compute();if(R.avg==null)return null;var sv=st.regs;st.regs=[0];var L;try{L=candidates(R);}finally{st.regs=sv;}L=L.filter(function(o){return o.j&&o.j!==BLOCK&&o.d!=null;});var nm=function(o){return o.x.uname+" "+o.x.nm;};var fit=L.filter(function(o){return o.d>=0;}),tr=L.filter(function(o){return o.d>=-3&&o.d<0;});return {fit:fit.length,tr:tr.length,bestFit:fit.length?nm(fit[0]):null,bestTry:tr.length?nm(tr[0]):null};}};
+window.JUNGSI={get:function(){return st;},seoul:function(){var R=compute();if(R.avg==null)return null;var sv=st.regs;st.regs=[0];var L;try{L=candidates(R);}finally{st.regs=sv;}L=L.filter(function(o){return o.j&&o.j!==BLOCK&&o.d!=null;});var nm=function(o){return o.x.uname+" "+o.x.nm;};var fit=L.filter(function(o){return o.d>=0;}),tr=L.filter(function(o){return o.d>=-3&&o.d<0;});var two=function(arr){var seen={},o=[];arr.forEach(function(x){if(o.length<2&&!seen[x.x.uname]){seen[x.x.uname]=1;o.push(nm(x));}});return o;};var t2=two(fit);if(t2.length<2)t2=t2.concat(two(tr).filter(function(n){return t2.every(function(m){return m.split(" ")[0]!==n.split(" ")[0];});})).slice(0,2);return {fit:fit.length,tr:tr.length,bestFit:fit.length?nm(fit[0]):null,bestTry:tr.length?nm(tr[0]):null,two:t2};}};
 var T1="통합사회",T2="통합과학";
 var EXAMS={jun:"6월",sep:"9월",oct:"10월"};
 var EXAMPLE={name:"",grade:"g2",exam:"oct",rural:1,kraw:80,mraw:62,eraw:84,hraw:41,t1raw:38,t2raw:36,
@@ -1556,8 +1560,8 @@ function advHtml(A){
   var SS=window.SUSI&&window.SUSI.get?window.SUSI.get():{},g2=SS.grade!=="g1";
   var seoulOK=!!(SE&&(g2?SE.fit>0:(SE.fit>0||SE.tr>0)));
   var rec=seoulOK?1:A.rec;var JJ=window.JUNGSI&&window.JUNGSI.get?window.JUNGSI.get():{},RU=+JJ.rural?" (농어촌 전형 기준)":"";
-  var o1=seoulOK?(g2?"정시 적정권에 인서울 대학이 "+SE.fit+"곳 있습니다"+RU+"(예: "+SE.bestFit+"). 내신은 2학년 2학기와 3학년 1학기만 남아 크게 바꾸기 어렵지만, 수능은 1년 동안 더 올릴 수 있습니다. 수시 6장은 정시로 갈 대학보다 높은 곳 위주로 쓰고, 수능을 끝까지 준비하세요."
-        :"정시로도 인서울이 보입니다"+RU+"("+(SE.fit?"적정 "+SE.fit+"곳":"")+(SE.fit&&SE.tr?" · ":"")+(SE.tr?"소신 "+SE.tr+"곳":"")+", 예: "+(SE.bestFit||SE.bestTry)+"). 수시 등급은 학년이 올라갈수록 내려가기 쉽고, 수능까지는 시간이 충분합니다. 내신을 지키면서 수능 공부를 꾸준히 이어 가세요.")
+  var o1=seoulOK?(g2?"정시 적정권에 인서울 대학이 "+SE.fit+"곳 있습니다("+(RU?"농어촌 전형 기준 · ":"")+"예: "+SE.two.join(", ")+"). 내신은 2학년 2학기와 3학년 1학기만 남아 크게 바꾸기 어렵지만, 수능은 1년 동안 더 올릴 수 있습니다. 수시 6장은 정시로 갈 대학보다 높은 곳 위주로 쓰고, 수능을 끝까지 준비하세요."
+        :"정시로도 <b class='uni2'>"+SE.two.join(", ")+"</b> 가능합니다("+(RU?"농어촌 전형 기준 · ":"")+(SE.fit?"적정 "+SE.fit+"곳":"")+(SE.fit&&SE.tr?" · ":"")+(SE.tr?"소신 "+SE.tr+"곳":"")+"). 수시 등급은 학년이 올라갈수록 내려가기 쉽고, 수능까지는 시간이 충분합니다. 내신을 지키면서 방학에는 수능 공부에 집중하세요.")
     :A.mode==="jungsi"?"정시가 내신보다 경쟁력이 있습니다. 수능 공부를 중심에 두고, 수시는 정시로 갈 수 있는 대학보다 높은 곳만 쓰세요."
         :A.mode==="even"?"수시와 정시가 비슷한 수준입니다. 정시를 함께 준비하면 정시가 받쳐 주므로 수시 6장을 더 높게 잡을 수 있습니다."
         :"지금은 정시가 내신보다 약합니다. 정시는 최저를 맞추는 정도로만 준비하는 편이 낫습니다.";
