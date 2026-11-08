@@ -738,7 +738,7 @@ td.cs b{font-weight:600}
 "use strict";
 var D=DATA_J, C=D.cuts;
 var $=function(id){return document.getElementById("j-"+id);};
-window.JUNGSI={get:function(){return st;}};
+window.JUNGSI={get:function(){return st;},seoul:function(){var R=compute();if(R.avg==null)return null;var sv=st.regs;st.regs=[0];var L;try{L=candidates(R);}finally{st.regs=sv;}L=L.filter(function(o){return o.j&&o.j!==BLOCK&&o.d!=null;});var nm=function(o){return o.x.uname+" "+o.x.nm;};var fit=L.filter(function(o){return o.d>=0;}),tr=L.filter(function(o){return o.d>=-3&&o.d<0;});return {fit:fit.length,tr:tr.length,bestFit:fit.length?nm(fit[0]):null,bestTry:tr.length?nm(tr[0]):null};}};
 var T1="통합사회",T2="통합과학";
 var EXAMS={jun:"6월",sep:"9월",oct:"10월"};
 var EXAMPLE={name:"",grade:"g2",exam:"oct",rural:1,kraw:80,mraw:62,eraw:84,hraw:41,t1raw:38,t2raw:36,
@@ -1552,14 +1552,23 @@ function advHtml(A){
   if(A.jTop==null)return h+'<p class="advnote">정시 탭에 모의고사 점수를 넣으면 판정합니다.</p></div>';
   var V={jungsi:"정시 유리",even:"수시·정시 비슷",susi:"수시 유리"}[A.mode];
   h+='<div class="verdict"><span class="vnum">내신 상위 약 <b>'+Math.round(A.sTop)+'%</b> · 정시 상위 약 <b>'+Math.round(A.jTop)+'%</b></span></div>';
-  var o1=A.mode==="jungsi"?"정시가 내신보다 경쟁력이 있습니다. 수능 공부를 중심에 두고, 수시는 정시로 갈 수 있는 대학보다 높은 곳만 쓰세요."
+  var SE=null;try{SE=window.JUNGSI&&window.JUNGSI.seoul?window.JUNGSI.seoul():null;}catch(e){SE=null;}
+  var SS=window.SUSI&&window.SUSI.get?window.SUSI.get():{},g2=SS.grade!=="g1";
+  var seoulOK=!!(SE&&(g2?SE.fit>0:(SE.fit>0||SE.tr>0)));
+  var rec=seoulOK?1:A.rec;var JJ=window.JUNGSI&&window.JUNGSI.get?window.JUNGSI.get():{},RU=+JJ.rural?" (농어촌 전형 기준)":"";
+  var o1=seoulOK?(g2?"정시 적정권에 인서울 대학이 "+SE.fit+"곳 있습니다"+RU+"(예: "+SE.bestFit+"). 내신은 2학년 2학기와 3학년 1학기만 남아 크게 바꾸기 어렵지만, 수능은 1년 동안 더 올릴 수 있습니다. 수시 6장은 정시로 갈 대학보다 높은 곳 위주로 쓰고, 수능을 끝까지 준비하세요."
+        :"정시로도 인서울이 보입니다"+RU+"("+(SE.fit?"적정 "+SE.fit+"곳":"")+(SE.fit&&SE.tr?" · ":"")+(SE.tr?"소신 "+SE.tr+"곳":"")+", 예: "+(SE.bestFit||SE.bestTry)+"). 수시 등급은 학년이 올라갈수록 내려가기 쉽고, 수능까지는 시간이 충분합니다. 내신을 지키면서 수능 공부를 꾸준히 이어 가세요.")
+    :A.mode==="jungsi"?"정시가 내신보다 경쟁력이 있습니다. 수능 공부를 중심에 두고, 수시는 정시로 갈 수 있는 대학보다 높은 곳만 쓰세요."
         :A.mode==="even"?"수시와 정시가 비슷한 수준입니다. 정시를 함께 준비하면 정시가 받쳐 주므로 수시 6장을 더 높게 잡을 수 있습니다."
         :"지금은 정시가 내신보다 약합니다. 정시는 최저를 맞추는 정도로만 준비하는 편이 낫습니다.";
+  if(!seoulOK&&g2&&SE&&SE.tr)o1+=" 정시 소신권에 인서울 "+SE.tr+"곳(예: "+SE.bestTry+")이 있습니다. 수능까지 백분위를 3 정도 올리면 적정권에 들어옵니다.";
+  if(!seoulOK&&!g2&&A.mode!=="susi")o1+=" 수시 등급은 학년이 올라갈수록 내려가기 쉬우니 수능 준비를 일찍 시작해 두는 편이 유리합니다.";
   var o2="최저가 있는 교과·종합 전형은 같은 대학이라도 컷이 낮은 편입니다. 지금 내신으로 노릴 수 있는 최저 전형 "+A.total+"곳 중 지금 모의고사로 최저를 맞추는 곳은 "+A.now+"곳입니다."+
     (A.total&&A.now/A.total>=0.7?" 대부분 맞추고 있으니 최저 있는 전형을 6장에 적극적으로 넣고, 수능까지 이 등급을 지키세요.":A.total?" 아래처럼 한 과목만 올려도 맞추는 곳이 늘어납니다.":"");
   if(A.ex2&&A.ex2.length){var JN2=["안정","적정","소신","상향"],JC2=["safe","fit","try","reach"];o2+='<span class="ex2">'+A.ex2.map(function(x){return '<span class="ex2i"><span class="pill p-'+JC2[x.j]+'">'+JN2[x.j]+'</span> <b>'+x.u+' '+x.unit+'</b> · '+x.t+'<br>최저 '+x.rule+' · 내신 컷 '+(x.cut!=null?x.cut.toFixed(2):"–")+' · <em>'+x.how+'</em></span>';}).join("")+'</span>';}
-  var o3="정시와 최저 모두 아직 거리가 있습니다. 최저 없는 교과·종합 전형을 중심으로, 남은 학기 내신을 올리는 데 힘을 모으세요.";
-  h+='<ol class="advopts">'+[["정시까지 준비하기",o1],["최저를 맞춰 수시를 올리기",o2],["내신에 집중하기",o3]].map(function(x,k){return '<li'+(A.rec===k+1?' class="on"':'')+'><b>'+(k+1)+'. '+x[0]+'</b>'+x[1]+'</li>';}).join("")+'</ol>';
+  if(g2)o2+=" 고2는 최저에 쓸 과목 두 개(영어 + 가장 자신 있는 과목)를 정해 수능까지 그 과목에 집중하는 것이 현실적입니다.";
+  var o3="정시와 최저 모두 아직 거리가 있습니다. 최저 없는 교과·종합 전형을 중심으로, 남은 학기 내신을 올리는 데 힘을 모으세요."+(g2?" 남은 내신은 2학년 2학기와 3학년 1학기 두 학기뿐이라, 이 두 학기 성적과 생기부가 수시 결과를 가릅니다.":" 고1은 남은 학기가 많아 내신을 올릴 여지가 큽니다.");
+  h+='<ol class="advopts">'+[["정시까지 준비하기",o1],["최저를 맞춰 수시를 올리기",o2],["내신에 집중하기",o3]].map(function(x,k){return '<li'+(rec===k+1?' class="on"':'')+'><b>'+(k+1)+'. '+x[0]+'</b>'+x[1]+'</li>';}).join("")+'</ol>';
   if(A.eng&&A.eng.length){
     var engAll0=A.eng.every(function(e){return !e.s.add;});
     h+='<div class="engbox"><b>영어로 최저를 맞추면</b><br>'+(engAll0?'영어 '+A.engG+'등급이지만 지금은 다른 과목으로 최저를 맞추고 있어, 영어를 올려도 맞추는 곳이 더 늘지 않습니다. 다만 수능에서 한 과목이 흔들릴 때 영어가 받쳐 주므로 2~3등급까지는 올려 두는 편이 안전합니다.':A.eng.map(function(e){return '영어 '+A.engG+'등급 → <b>'+e.to+'등급</b>: 최저 맞추는 곳 <span class="bn">'+A.now+' → '+e.s.n+'곳</span> (+'+e.s.add+')'+(e.s.ex.length?'<br><span style="font-size:12px">새로 열리는 대학 예: '+e.s.ex.join(", ")+'</span>':'');}).join("<br>"))+
