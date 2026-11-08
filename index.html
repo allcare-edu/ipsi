@@ -179,6 +179,26 @@ svg text{font-family:var(--f-body)}
 .modes a:hover{border-color:var(--accent);color:var(--accent)}
 .empty{padding:18px;text-align:center;color:var(--ink-3);font-size:13.5px}
 .cheoin{display:inline-block;vertical-align:middle;font-family:var(--f-body);font-size:.42em;font-weight:700;color:var(--brand-ink);background:#FBF6D2;border:1.5px solid var(--brand);border-radius:8px;padding:3px 9px;margin-left:8px;position:relative;top:-3px;white-space:nowrap}
+[id$="exam"] button.has::after{content:" ●";font-size:9px;vertical-align:2px;color:var(--safe)}
+[id$="exam"] button.has[aria-pressed="true"]::after{color:inherit}
+.tavg{font-size:13.5px;color:var(--ink-2);margin:0 0 10px}.tavg b{font-family:var(--f-mono);color:var(--ink)}
+.tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.tgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tcell{background:var(--surface-2);border-radius:10px;padding:8px 8px 4px;min-width:0}
+.tcell .th{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
+.tchart{width:100%;height:auto;display:block}
+.tchart .tg{stroke:var(--line);stroke-width:1}
+.tchart .ty{font-size:8px;fill:var(--ink-3);font-family:var(--f-mono)}
+.tchart .tx{font-size:9px;fill:var(--ink-3);text-anchor:middle}
+.tchart .tl{fill:none;stroke:var(--accent);stroke-width:2}
+.tchart .td{stroke:var(--surface);stroke-width:1.5;fill:var(--accent)}
+.tchart .td.g1,.tchart .td.g2{fill:var(--safe)}.tchart .td.g3,.tchart .td.g4{fill:var(--try)}.tchart .td.g5,.tchart .td.g6,.tchart .td.g7,.tchart .td.g8,.tchart .td.g9{fill:var(--reach)}
+.tchart .tv{font-size:10px;font-weight:700;fill:var(--ink);text-anchor:middle;font-family:var(--f-mono)}
+.tup{color:var(--safe);font-weight:700;font-size:12px}.tdn{color:var(--reach);font-weight:700;font-size:12px}
+.tadv{margin-top:12px;background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.65}
+.tadv>b{color:var(--accent);font-size:15px}
+.tadv p{margin:6px 0 0}
+.tpri{margin:4px 0 0;padding-left:20px}.tpri li{margin:4px 0}
 </style>
 
 <div class="wrap">
@@ -297,6 +317,12 @@ svg text{font-family:var(--f-body)}
         </div>
       </section>
 
+      <section class="card" aria-labelledby="h-trend">
+        <h2 id="h-trend">모의고사 성적 추이</h2>
+        <div id="trend"></div>
+        <div id="trendadv"></div>
+      </section>
+
       <section class="card" aria-labelledby="h-tgt">
         <div class="tgt-head">
           <h2 id="h-tgt" style="margin:0">목표 대학까지 남은 점수</h2>
@@ -383,6 +409,8 @@ try{st=JSON.parse(localStorage.getItem(KEY));}catch(e){st=null;}
 if(!st||!st.exam||!st.grade||!C[st.grade+"_"+st.exam])st=JSON.parse(JSON.stringify(EXAMPLE));
 if(!st.targets)st.targets=[];st.cats=st.cats.map(function(c){return c==="보건"?"간호/보건":c;});if(st.ptarget==null)st.ptarget="";
 var isExample=!st.name&&JSON.stringify(st)===JSON.stringify(EXAMPLE);
+if(!st.scores)st.scores={};
+if(!isExample&&!st.scores[st.grade+"_"+st.exam]){(function(){var d={};["kraw","mraw","eraw","hraw","t1raw","t2raw","kstd","kpct","mstd","mpct","t1std","t1pct","t2std","t2pct"].forEach(function(f){d[f]=st[f]==null?"":st[f];});if(["kraw","mraw","eraw","hraw","t1raw","t2raw"].some(function(f){return d[f]!==""&&d[f]!=null;}))st.scores[st.grade+"_"+st.exam]=d;})();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
 
 /* ---------- 환산 ---------- */
@@ -460,13 +488,68 @@ function fill(){
 }
 function segSet(id,vals){$(id).querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",vals.indexOf(b.dataset.v)>=0?"true":"false");});}
 FIELDS.forEach(function(f){var el=$(f);if(!el)return;el.addEventListener(el.tagName==="SELECT"?"change":"input",function(){
-  var v=el.value;if(el.type==="number")v=v===""?"":+v;if(f==="adj")v=+v;st[f]=v;isExample=false;save();render();});});
+  var v=el.value;if(el.type==="number")v=v===""?"":+v;if(f==="adj")v=+v;st[f]=v;isExample=false;stash();save();render();});});
 function single(id,key,num){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;st[key]=num?+b.dataset.v:b.dataset.v;isExample=false;segSet(id,[b.dataset.v]);save();render();});}
-single("grade","grade");single("exam","exam");single("rural","rural",true);single("scope","scope");
+function swSeg(id){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b||b.dataset.v===st[id])return;switchExam(id,b.dataset.v);});}
+swSeg("grade");swSeg("exam");single("rural","rural",true);single("scope","scope");
 function multi(id,key,num){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var v=num?+b.dataset.v:b.dataset.v;var a=st[key];var i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);isExample=false;segSet(id,a.map(String));save();render();});}
 multi("cats","cats");multi("regs","regs",true);multi("jf","jf");
-$("reset").addEventListener("click",function(){st=JSON.parse(JSON.stringify(EXAMPLE));isExample=true;save();fill();render();$("copyst").textContent="예시 점수로 되돌렸습니다";});
+$("reset").addEventListener("click",function(){var keep=st.scores||{};st=JSON.parse(JSON.stringify(EXAMPLE));st.scores=keep;isExample=true;save();fill();render();$("copyst").textContent="예시 점수로 되돌렸습니다";});
 
+/* ---------- 모의고사 누적 (시험별 저장) ---------- */
+var SF=["kraw","mraw","eraw","hraw","t1raw","t2raw","kstd","kpct","mstd","mpct","t1std","t1pct","t2std","t2pct"];
+var EXORD=["jun","sep","oct"];
+function hasVals(d){return !!d&&SF.some(function(f){return d[f]!==""&&d[f]!=null;});}
+function stash(){if(!st.scores)st.scores={};var d={};SF.forEach(function(f){d[f]=st[f]==null?"":st[f];});if(hasVals(d))st.scores[st.grade+"_"+st.exam]=d;else delete st.scores[st.grade+"_"+st.exam];}
+function switchExam(key,v){if(!isExample)stash();st[key]=v;if(!C[st.grade+"_"+st.exam])st.exam="oct";var d=(st.scores||{})[st.grade+"_"+st.exam];SF.forEach(function(f){st[f]=d&&d[f]!=null?d[f]:"";});isExample=false;fill();save();render();}
+function examMarks(){var box=$("exam");if(!box)return;[].forEach.call(box.querySelectorAll("button"),function(b){var d=(st.scores||{})[st.grade+"_"+b.dataset.v];b.classList.toggle("has",hasVals(d));});}
+function examRow(ex){var E=C[st.grade+"_"+ex],d=(st.scores||{})[st.grade+"_"+ex];if(!E||!hasVals(d))return null;
+  var k=conv(E.kor,d.kraw,d.kstd,d.kpct,100),m=conv(E.math,d.mraw,d.mstd,d.mpct,100),t1=conv(E.soc,d.t1raw,d.t1std,d.t1pct,50),t2=conv(E.sci,d.t2raw,d.t2std,d.t2pct,50);
+  var ok=[k,m,t1,t2].every(function(x){return x.pct!=null;});
+  return {ex:ex,K:{g:k.g,p:k.pct},M:{g:m.g,p:m.pct},E:{g:engGrade(d.eraw)},T1:{g:t1.g,p:t1.pct},T2:{g:t2.g,p:t2.pct},H:{g:hisGrade(d.hraw)},avg:ok?(k.pct+m.pct+(t1.pct+t2.pct)/2)/3:null};}
+var TSUB=[["K","국어"],["M","수학"],["E","영어"],["T1","통합사회"],["T2","통합과학"],["H","한국사"]];
+var TIPS={K:"독서 지문을 매일 2개씩 시간을 재고 풀고, 틀린 문제는 답의 근거가 된 문장을 찾아 표시하세요.",
+  M:"틀린 문제를 유형별로 모아 사흘 뒤 다시 풀어 보세요. 같은 유형을 또 틀리면 교과서 예제와 개념부터 다시 잡습니다.",
+  E:"영어는 절대평가라 80점이면 2등급입니다. 듣기를 모두 맞히고, 빈칸·순서·삽입에서 시간을 아끼는 연습을 하세요.",
+  T1:"통합사회는 50점 만점이라 개념 정리로 점수가 빨리 오릅니다. 자주 틀리는 단원을 정해 개념서를 한 번 더 보세요.",
+  T2:"통합과학은 50점 만점이라 개념 정리로 점수가 빨리 오릅니다. 계산 문제는 풀이 과정을 끝까지 써 보며 실수를 줄이세요.",
+  H:"한국사는 대학마다 최저나 감점 기준이 있으니 4등급 이내를 유지하세요. 시대 흐름표 한 장으로 정리하면 충분합니다."};
+var TEASE={E:0,T1:1,T2:1,M:2,K:3,H:4};
+function miniChart(pts){var W=150,H=96,px=24,py=14,n=EXORD.length;
+  var x=function(i){return px+i*(W-2*px)/(n-1);},y=function(g){return py+(g-1)*(H-2*py)/8;};
+  var s="<svg viewBox='0 0 "+W+" "+H+"' class='tchart' role='img'>";
+  [1,3,5,7,9].forEach(function(g){s+="<line x1='"+px+"' x2='"+(W-px)+"' y1='"+y(g)+"' y2='"+y(g)+"' class='tg'/><text x='4' y='"+(y(g)+3)+"' class='ty'>"+g+"</text>";});
+  var p=[];EXORD.forEach(function(ex,i){var v=pts[i];if(v&&v.g!=null)p.push([x(i),y(v.g),v]);});
+  if(p.length>1)s+="<polyline class='tl' points='"+p.map(function(q){return q[0]+","+q[1];}).join(" ")+"'/>";
+  p.forEach(function(q){s+="<circle cx='"+q[0]+"' cy='"+q[1]+"' r='4' class='td g"+q[2].g+"'/><text x='"+q[0]+"' y='"+(q[1]-7)+"' class='tv'>"+q[2].g+"</text>";});
+  EXORD.forEach(function(ex,i){s+="<text x='"+x(i)+"' y='"+(H-1)+"' class='tx'>"+EXAMS[ex]+"</text>";});
+  return s+"</svg>";}
+function renderTrend(){var box=$("trend"),adv=$("trendadv");if(!box)return;
+  var rows=EXORD.map(examRow),have=rows.filter(Boolean);
+  if(!have.length){box.innerHTML="<p class='hint'>모의고사 점수를 넣으면 시험별로 저장되고, 과목별 추이가 그래프로 나옵니다.</p>";adv.innerHTML="";return;}
+  var avgs=rows.map(function(r,i){return r&&r.avg!=null?EXAMS[EXORD[i]]+" <b>"+f1(r.avg)+"</b>":null;}).filter(Boolean);
+  var h="<p class='tavg'>국·수·탐 백분위 평균 · "+avgs.join(" → ")+"</p><div class='tgrid'>";
+  TSUB.forEach(function(sb){var pts=rows.map(function(r){return r?r[sb[0]]:null;});var last=null,first=null;pts.forEach(function(v){if(v&&v.g!=null){if(!first)first=v;last=v;}});
+    var dl=first&&last&&first!==last?first.g-last.g:0;var tr=dl>0?"<span class='tup'>▲ "+dl+"</span>":dl<0?"<span class='tdn'>▼ "+(-dl)+"</span>":"";
+    h+="<div class='tcell'><div class='th'><b>"+sb[1]+"</b>"+tr+"</div>"+miniChart(pts)+"</div>";});
+  box.innerHTML=h+"</div><p class='hint'>세로축은 등급(위로 갈수록 좋음)입니다. 6월·9월·10월 점수는 따로 저장되니, 위 「모의고사」에서 시험을 바꿔 가며 넣으세요.</p>";
+  // 학습 방향
+  if(have.length<2){adv.innerHTML="<div class='tadv'><b>향후 학습 방향</b><p>지금은 "+EXAMS[have[0].ex]+" 점수만 저장돼 있습니다. 다른 달 모의고사도 넣으면 과목별로 오르고 내린 흐름을 보고 학습 방향을 알려 드립니다.</p></div>";return;}
+  var F=have[0],L=have[have.length-1],info=[];
+  TSUB.forEach(function(sb){var a=F[sb[0]].g,b=L[sb[0]].g;if(a==null||b==null)return;info.push({k:sb[0],nm:sb[1],a:a,b:b,d:a-b});});
+  var up=info.filter(function(x){return x.d>0;}),dn=info.filter(function(x){return x.d<0;});
+  var main=info.filter(function(x){return x.k!=="H";});
+  var pri=main.slice().sort(function(p,q){var sp=(p.d<0?-10:0)+(-p.b)+TEASE[p.k]*0.3,sq=(q.d<0?-10:0)+(-q.b)+TEASE[q.k]*0.3;return sp-sq;}).filter(function(x){return x.b>=2;}).slice(0,2);
+  var lab=EXAMS[F.ex]+" → "+EXAMS[L.ex];
+  var A="<div class='tadv'><b>향후 학습 방향</b> <span class='hint'>("+lab+" 기준)</span>";
+  var dAvg=F.avg!=null&&L.avg!=null?L.avg-F.avg:null;
+  if(dAvg!=null)A+="<p>국·수·탐 백분위 평균: "+f1(F.avg)+" → "+f1(L.avg)+" ("+(Math.abs(dAvg)<1?"거의 그대로입니다":dAvg>0?f1(dAvg)+" 올랐습니다":f1(-dAvg)+" 내려갔습니다")+")</p>";
+  if(up.length)A+="<p><span class='tup'>오른 과목</span> "+up.map(function(x){return x.nm+" "+x.a+"→"+x.b+"등급";}).join(", ")+". 지금 공부 방식이 통하고 있으니 그대로 이어 가세요.</p>";
+  if(dn.length)A+="<p><span class='tdn'>내려간 과목</span> "+dn.map(function(x){return x.nm+" "+x.a+"→"+x.b+"등급";}).join(", ")+". 시험 범위가 넓어진 영향일 수 있으니, 틀린 문제가 개념 부족인지 시간 부족인지 먼저 확인하세요.</p>";
+  if(!up.length&&!dn.length)A+="<p>모든 과목 등급이 그대로입니다. 이제는 한 과목을 정해 한 등급을 올리는 데 집중할 때입니다.</p>";
+  if(pri.length)A+="<p><b>다음 시험까지 집중할 과목</b></p><ol class='tpri'>"+pri.map(function(x){return "<li><b>"+x.nm+"</b> ("+x.b+"등급"+(x.d<0?", 하락":"")+") "+TIPS[x.k]+"</li>";}).join("")+"</ol>";
+  var hh=info.filter(function(x){return x.k==="H"&&x.b>=5;});if(hh.length)A+="<p>"+TIPS.H+"</p>";
+  adv.innerHTML=A+"</div>";}
 /* ---------- 계산 ---------- */
 var last=null;
 function compute(){
@@ -513,8 +596,9 @@ function gradeUI(){var g1=st.grade==="g1";document.documentElement.setAttribute(
   $("gb-g").textContent=G;$("h1g").textContent=G;$("gb-t").textContent=G+" 화면 · "+(g1?"2029학년도 수능 (2028. 11월)":"2028학년도 수능 (2027. 11월)");
   $("gb-s").textContent="2026 "+EXAMS[st.exam]+" 학력평가("+G+") 등급컷으로 환산 중";
   var tc=document.querySelector('meta[name="theme-color"]');if(tc)tc.setAttribute("content",g1?"#6A3C9E":"#26398C");}
-function render(){gradeUI();
+function render(){gradeUI();examMarks();
   var R=compute();last=R;
+  try{renderTrend();}catch(e){console.error(e);}
   // 등급 배지
   function badge(id,g){var el=$(id);if(g==null){el.textContent="";el.className="badge";return;}el.textContent=g+"등급";el.className="badge g"+g;}
   badge("g-kor",R.k.g);badge("g-math",R.m.g);badge("g-t1",R.t1.g);badge("g-t2",R.t2.g);badge("g-eng",R.eng);badge("g-his",R.his);
