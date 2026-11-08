@@ -213,6 +213,13 @@ td.cs b{font-weight:600}
 .stp ul{margin:0;padding-left:18px;font-size:13px;display:grid;gap:3px}
 .est2{font-size:10.5px;color:var(--ink-3);border:1px dashed var(--line);border-radius:4px;padding:0 4px;margin-left:3px}
 
+.semtbl tr.off td{opacity:.45}
+.semtbl tr.off input{background:var(--surface);cursor:not-allowed}
+.semtbl tr.need input{border-color:var(--try)}
+.semtbl input.bad{border-color:var(--reach);box-shadow:inset 0 0 0 1px var(--reach)}
+.semtbl em.req{font-style:normal;color:var(--reach);margin-left:2px}
+.warn:empty{display:none}
+
 /* ---- 통합 ---- */
 .modes button{font:inherit;font-size:14px;padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
 .modes button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:600}
@@ -319,11 +326,12 @@ td.cs b{font-weight:600}
 
         <div class="fgroup">
           <span class="flabel">내신 평균 등급 (5등급제, 학기별)</span>
-          <p class="hint">성적표의 학기 평균을 넣으세요. 빈 학기는 계산에서 뺍니다. 국영수사는 국어·영어·수학·사회(한국사 포함), 국영수과는 국어·영어·수학·과학입니다.</p>
+          <p class="hint">성적표의 학기 평균(1.00~5.00)을 넣으세요. *는 이미 끝난 학기라 꼭 넣어야 하고, 아직 오지 않은 학기는 잠겨 있습니다. 빈 학기는 계산에서 뺍니다. 국영수사는 국어·영어·수학·사회(한국사 포함), 국영수과는 국어·영어·수학·과학입니다.</p>
           <div class="semtbl tbl"><table>
             <thead><tr><th class="l">학기</th><th>전과목</th><th>국영수사</th><th>국영수과</th></tr></thead>
             <tbody id="s-semrows"></tbody>
           </table></div>
+          <p class="warn" id="s-semmsg" role="status"></p>
           <details class="ov" id="s-calcbox"><summary>과목별 등급으로 학기 평균 계산하기</summary>
             <div class="calc">
               <label class="mini" for="s-calcsem">넣을 학기<select id="s-calcsem"></select></label>
@@ -999,8 +1007,9 @@ function f1(x){return x==null||isNaN(x)?"–":(+x).toFixed(1);}
 
 /* ---------- 내신 ---------- */
 function num(v){if(v===""||v==null)return null;v=+v;return isNaN(v)||v<1||v>5?null:v;}
-function semAvg(fld){var s=0,n=0;SEMS.forEach(function(k){var o=st.sem[k];var v=o?num(o[fld]):null;if(v==null&&o&&fld!=="a")v=num(o.a);if(v!=null){s+=v;n++;}});return n?{v:s/n,n:n}:null;}
-function filled(){return SEMS.filter(function(k){var o=st.sem[k];return o&&(num(o.a)!=null||num(o.s)!=null||num(o.c)!=null);});}
+function allowSems(){return st.grade==="g1"?["1-1","1-2"]:["1-1","1-2","2-1","2-2"];}
+function semAvg(fld){var s=0,n=0;allowSems().forEach(function(k){var o=st.sem[k];var v=o?num(o[fld]):null;if(v==null&&o&&fld!=="a")v=num(o.a);if(v!=null){s+=v;n++;}});return n?{v:s/n,n:n}:null;}
+function filled(){return allowSems().filter(function(k){var o=st.sem[k];return o&&(num(o.a)!=null||num(o.s)!=null||num(o.c)!=null);});}
 function basisFor(cat){if(st.basis!=="auto")return st.basis;return JA[cat]?"c":"s";}
 function myG5(cat){var b=basisFor(cat);var r=semAvg(b)||semAvg("a");return r?r.v:null;}
 
@@ -1094,7 +1103,8 @@ function buildSem(){
     var tr=document.createElement("tr");var o=st.sem[k]||{};
     tr.innerHTML='<td class="l">'+k+'</td>'+["a","s","c"].map(function(f){return '<td><input type="number" inputmode="decimal" step="0.01" min="1" max="5" id="s-sem-'+k+'-'+f+'" aria-label="'+k+' '+({a:"전과목",s:"국영수사",c:"국영수과"}[f])+'" value="'+(o[f]==null?"":o[f])+'"></td>';}).join("");
     tb.appendChild(tr);
-    ["a","s","c"].forEach(function(f){$("sem-"+k+"-"+f).addEventListener("input",function(e){st.sem[k]=st.sem[k]||{};st.sem[k][f]=e.target.value===""?null:+e.target.value;render(true);});});
+    ["a","s","c"].forEach(function(f){var inp=$("sem-"+k+"-"+f);inp.addEventListener("input",function(e){st.sem[k]=st.sem[k]||{};var v=e.target.value===""?null:+e.target.value;st.sem[k][f]=(v==null||isNaN(v))?null:v;render(true);});
+      inp.addEventListener("blur",function(e){var v=e.target.value;if(v==="")return;v=Math.round(Math.min(5,Math.max(1,+v))*100)/100;if(isNaN(v)){e.target.value="";st.sem[k][f]=null;}else{e.target.value=v;st.sem[k][f]=v;}render(true);});});
   });
 }
 var CG=["국어","수학","영어","사회","한국사","과학","기타"];
@@ -1167,7 +1177,21 @@ function render(soft){
   segSync("nsf",function(v){return v===st.nsf;});
   if(!soft){$("name").value=st.name||"";$("kw").value=st.kw||"";$("basis").value=st.basis;$("adj").value=String(st.adj);$("calcsem").value=st.calcsem;}
   var fl=filled();
-  [].forEach.call($("semrows").children,function(tr,i){tr.className=fl.indexOf(SEMS[i])>=0?"done":"";});
+  var allow=allowSems(),req=g1?["1-1"]:["1-1","1-2","2-1"],msgs=[];
+  [].forEach.call($("semrows").children,function(tr,i){var k=SEMS[i],ok=allow.indexOf(k)>=0,isReq=req.indexOf(k)>=0,o=st.sem[k]||{};
+    tr.className=(fl.indexOf(k)>=0?"done":"")+(ok?"":" off")+(isReq&&fl.indexOf(k)<0?" need":"");
+    tr.firstChild.innerHTML=k+(isReq?'<em class="req" title="필수">*</em>':"");
+    [].forEach.call(tr.querySelectorAll("input"),function(inp){inp.disabled=!ok;inp.classList.remove("bad");});
+    if(!ok)return;
+    var a=num(o.a),sv=num(o.s),c=num(o.c),bad=[];
+    ["a","s","c"].forEach(function(f){var raw=o[f];if(raw!=null&&raw!==""&&num(raw)==null){bad.push(f);}});
+    if(a!=null&&sv!=null&&Math.abs(a-sv)>1.5)bad.push("a","s");
+    if(a!=null&&c!=null&&Math.abs(a-c)>1.5)bad.push("a","c");
+    if(sv!=null&&c!=null&&Math.abs(sv-c)>1.5)bad.push("s","c");
+    if(bad.length){bad.forEach(function(f){$("sem-"+k+"-"+f).classList.add("bad");});msgs.push(k+"학기 숫자가 서로 맞지 않습니다(1.00~5.00, 전과목·국영수사·국영수과 차이는 1.5 이내).");}
+    if(isReq&&fl.indexOf(k)<0)msgs.push(k+"학기는 이미 끝난 학기라 꼭 넣어야 합니다.");
+  });
+  $("semmsg").innerHTML=msgs.length?msgs.map(function(m){return "<span>"+m+"</span>";}).join("<br>"):"";
   var ms=st.mockSrc||"";
   $("mocksrc").textContent=ms.indexOf("jungsi:")===0?("정시 시뮬레이터의 "+(ms.split(":")[1]==="g1"?"고1 ":"고2 ")+EXN[ms.split(":")[2]]+" 학평 점수로 채웠습니다(보정 "+st.adj+"). 바꾸면 그 값으로 판정합니다."):ms==="ex"?"예시 등급입니다. 내 모의고사 등급으로 바꾸거나 정시 시뮬레이터 점수를 불러오세요.":"직접 고른 등급입니다.";
   save();
