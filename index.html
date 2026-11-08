@@ -252,6 +252,10 @@ td.cs b{font-weight:600}
 #minf button{border-color:#B8860B;color:#8A6400}
 #minf button[aria-pressed="true"]{background:#F2C230;border-color:#F2C230;color:#3A2A00}
 .tmin{color:#E0A800;font-size:14px;margin-right:3px;vertical-align:-1px}
+.smin{font-size:12px;font-weight:600;color:#8A6400;background:#FFF4CC;border-radius:6px;padding:2px 7px;justify-self:start;overflow-wrap:anywhere}
+.slot.sj0 .smin,.slot.sj1 .smin{background:#FFF4CC;color:#5A4200}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .smin{background:#3A2E05;color:#F2D27A}}
+:root[data-theme="dark"] .smin{background:#3A2E05;color:#F2D27A}
 
 /* ---- 통합 ---- */
 .modes button{font:inherit;font-size:14px;padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
@@ -388,7 +392,7 @@ td.cs b{font-weight:600}
 
         <div class="fgroup">
           <span class="flabel">볼 전형</span>
-          <div class="typrow"><div class="seg" id="s-minf" role="group" aria-label="수능 최저 있는 전형에 별표"></div><div class="seg" id="s-typs" role="group" aria-label="전형 종류"></div></div>
+          <div class="typrow"><div class="seg" id="s-minf" role="group" aria-label="켜면 최저 있는 전형만, 끄면 최저 없는 전형만"></div><div class="seg" id="s-typs" role="group" aria-label="전형 종류"></div></div>
           <div class="seg" id="s-partf" role="group" aria-label="일부 과목 반영 대학만 보기"></div>
           <p class="hint" style="margin-top:-2px">「일부반영」은 학생부에서 상위 몇 과목만 골라 계산하는 대학입니다(예: 우송대 12과목). 공개 컷이 전 과목 평균보다 좋게 나옵니다.</p>
           <span class="flabel">생기부 묶음 (여러 개 선택 가능)</span>
@@ -1122,6 +1126,7 @@ function judge(r){
 }
 function catOk(r){
   if(st.partOnly&&!r.part)return false;
+  if(!!st.minMark!==hasMin(r))return false;
   var u=UV[r.u];if(st.regs.length&&st.regs.indexOf(u[1])<0)return false;
   var kw=(st.kw||"").trim();
   if(kw){return kw.split(/[\s,]+/).filter(Boolean).some(function(w){return r.unit.indexOf(w)>=0||u[0].indexOf(w)>=0;});}
@@ -1272,7 +1277,7 @@ function renderList(B,JS){
       '<td class="cs">'+csCell(r,J)+'</td>'+
       '<td class="n">'+(J?(J.g5-J.cut5>0?"+":"")+f2(J.g5-J.cut5):"–")+'</td><td class="l">'+(J?pill(J.j,J.no):"–")+(r.typ===1&&J?'<span class="est"> 참고</span>':'')+'</td></tr>';
   }).join(""):'<tr><td colspan="8"><div class="empty">조건에 맞는 학과가 없습니다. 범위를 「전체」로 바꾸거나 계열·지역을 넓혀 보세요.</div></td></tr>';
-  $("listnote").textContent=(tot>200?"조건에 맞는 "+tot+"곳 중 컷이 높은(어려운) 순으로 200곳만 보여 줍니다. ":"조건에 맞는 "+tot+"곳. ")+"내신 − 컷은 5등급제 기준이며 −면 컷보다 좋은 내신입니다. 마지막 합격선(교과 70%컷 × 1.15, 종합 × 1.2)을 넘는 곳은 불가능으로 보고 뺐습니다. 「내 내신 근처」는 컷보다 0.5 이상 좋은 곳(지나친 안정)도 뺀 범위입니다.";
+  $("listnote").textContent=(st.minMark?"★ 최저유무 켬: 수능 최저가 있는 전형만 보입니다. ":"★ 최저유무 끔: 수능 최저가 없는 전형만 보입니다. ")+(tot>200?"조건에 맞는 "+tot+"곳 중 컷이 높은(어려운) 순으로 200곳만 보여 줍니다. ":"조건에 맞는 "+tot+"곳. ")+"내신 − 컷은 5등급제 기준이며 −면 컷보다 좋은 내신입니다. 마지막 합격선(교과 70%컷 × 1.15, 종합 × 1.2)을 넘는 곳은 불가능으로 보고 뺐습니다. 「내 내신 근처」는 컷보다 0.5 이상 좋은 곳(지나친 안정)도 뺀 범위입니다.";
 }
 function nsRows(){return NS.filter(function(r){return st.typs.indexOf(2)>=0&&catOk(r);});}
 function renderNS(){
@@ -1309,7 +1314,7 @@ function renderSix(B,JS,BOUT){
   $("sixmode").innerHTML=M.aggr?"정시 수준이 수시와 비슷하거나 더 좋아 <b>상향 2 · 소신 2 · 적정 1 · 안정 1</b>로 짰습니다. 정시가 받쳐 주니 수시는 위를 노립니다.":"<b>상향 1 · 소신 1 · 적정 3 · 안정 1</b>로 짰습니다."+(M.jTop!=null?" 정시 수준이 수시보다 낮아 수시에서 합격 가능성을 높였습니다.":" 정시 점수를 넣으면 정시 수준에 맞춰 조합이 바뀝니다.");
   $("six").innerHTML=pick.map(function(p){var j=p[0],r=p[1];if(!r)return '<div class="slot empty-slot"><span class="pill p-'+JC[j]+'">'+JN[j]+'</span><span class="meta">이 조건에서는 해당 학과가 없습니다.</span></div>';var J=JS[r.k];
     var lab=j===9?'<span class="pill p-space">우주상향</span>':pill(j,false);
-    return '<div class="slot sj'+j+'"><div>'+lab+' '+tag(r)+'</div><span class="nm">'+esc(UV[r.u][0])+' '+esc(r.unit)+'</span><span class="meta">'+esc(r.t)+'</span><span class="num">컷 '+f2(J.cut5)+' (9등급 '+f2(r.g70)+(r.adj?' 보정':'')+') · 내 '+f2(J.g5)+'</span>'+(j===9?'<span class="meta">상향 범위에 맞는 학과가 없어, 불가능으로 분류된 곳 중 가장 가까운 곳입니다.</span>':'')+'</div>';}).join("");
+    return '<div class="slot sj'+j+'"><div>'+lab+' '+tag(r)+'</div><span class="nm">'+esc(UV[r.u][0])+' '+esc(r.unit)+'</span><span class="meta">'+esc(r.t)+'</span><span class="num">컷 '+f2(J.cut5)+' (9등급 '+f2(r.g70)+(r.adj?' 보정':'')+') · 내 '+f2(J.g5)+'</span>'+(hasMin(r)?'<span class="smin">★ 최저 '+esc(ruleText(J.cs.rule))+(J.ce.s==="ok"?' · 지금 충족':J.ce.s==="fail"?' · 지금 미충족':'')+'</span>':'')+(j===9?'<span class="meta">상향 범위에 맞는 학과가 없어, 불가능으로 분류된 곳 중 가장 가까운 곳입니다.</span>':'')+'</div>';}).join("");
 }
 function targetList(B,JS){
   var T=st.targets.map(function(k){return BYK[k];}).filter(Boolean).filter(function(r){return r.typ!==2;}),auto=false,plus={};
