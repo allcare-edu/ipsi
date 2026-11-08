@@ -648,7 +648,7 @@ function planHTML(tg,R){
   if(need<=0)return "<div class='passed'>지금 점수로 이 학과 70% 컷보다 <b>"+f1(-need)+"</b> 높습니다. 지금 점수를 지키는 게 전략입니다. 안정권(+3)까지는 "+(need+3>0?f1(need+3)+" 더 필요합니다.":"이미 들어와 있습니다.")+"</div>";
   var base={};SUBJ.forEach(function(s){base[s.k]=+st[s.raw];});
   var cands=[
-    {t:"가장 쉬운 길",d:"올리기 쉬운 과목·구간부터 차례로",p:makePlan(["k","m","t1","t2"],need,base)},
+    {t:"가장 현실적인 방법",d:"올리기 쉬운 과목·구간부터 차례로",p:makePlan(["k","m","t1","t2"],need,base)},
     {t:"탐구로 끝내기",d:"남은 기간 올리기 쉬운 탐구 2과목만",p:makePlan(["t1","t2"],need,base)},
     {t:"국어·수학 중심",d:"반영 비중이 큰 국어·수학만",p:makePlan(["k","m"],need,base)}];
   SUBJ.forEach(function(s){cands.push({t:s.nm()+" 하나만",d:"한 과목에 집중",p:makePlan([s.k],need,base)});});
