@@ -1,4 +1,4 @@
-# 올케어 입시 시뮬레이터
+# 올케어 입시 시뮬
 
 jungsi.allcare-edu.com 배포 파일. Netlify가 main 브랜치를 그대로 게시한다(빌드 없음, publish directory `.`).
 
