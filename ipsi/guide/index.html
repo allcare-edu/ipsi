@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>입시 시뮬 사용설명서</title>
+<meta name="description" content="올케어 입시 시뮬(수시·정시) 사용설명서">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#EDEFF3;--surface:#FFFFFF;--surface-2:#F4F5F8;--ink:#151A26;--ink-2:#4A5268;--ink-3:#7F879B;--line:#D8DCE5;
+  --accent:#26398C;--accent-soft:#E3E7F6;--purple:#6A3D9E;--purple-soft:#EEE6F8;--brand:#DECA2B;
+  --safe:#0E6B57;--safe-soft:#DCF0E9;--fit:#26398C;--fit-soft:#E3E7F6;--try:#8A5A00;--try-soft:#FAEFD6;--reach:#A2431F;--reach-soft:#F9E3D9;
+  --star:#8A6400;--star-soft:#FFF4CC;
+  --f-display:"Gowun Batang",serif;--f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;--f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(21,26,38,.05),0 10px 24px -16px rgba(21,26,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1016;--surface:#171B24;--surface-2:#1D222D;--ink:#E7EAF2;--ink-2:#A9B0C2;--ink-3:#737B90;--line:#2A303D;
+  --accent:#9DAAF0;--accent-soft:#1D2446;--purple:#C2A2EE;--purple-soft:#2A1F3D;
+  --safe:#5CCAA9;--safe-soft:#12302A;--fit:#9DAAF0;--fit-soft:#1D2446;--try:#E7B45A;--try-soft:#352A12;--reach:#FF9A7C;--reach-soft:#3A1F17;
+  --star:#F2D27A;--star-soft:#3A2E05;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1016;--surface:#171B24;--surface-2:#1D222D;--ink:#E7EAF2;--ink-2:#A9B0C2;--ink-3:#737B90;--line:#2A303D;
+  --accent:#9DAAF0;--accent-soft:#1D2446;--purple:#C2A2EE;--purple-soft:#2A1F3D;
+  --safe:#5CCAA9;--safe-soft:#12302A;--fit:#9DAAF0;--fit-soft:#1D2446;--try:#E7B45A;--try-soft:#352A12;--reach:#FF9A7C;--reach-soft:#3A1F17;
+  --star:#F2D27A;--star-soft:#3A2E05;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:780px;margin:0 auto;padding:20px 16px 64px}
+a{color:var(--accent)}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{height:34px;width:auto}
+.brand b{display:block;font-size:15px}
+.brand span{display:block;font-size:11px;letter-spacing:.12em;color:var(--ink-3)}
+.back{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;text-decoration:none;background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px}
+h1{font-family:var(--f-display);font-size:clamp(28px,7vw,38px);line-height:1.25;margin:6px 0 8px;letter-spacing:-.01em}
+.lead{color:var(--ink-2);margin:0 0 18px}
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;box-shadow:var(--shadow);margin-bottom:22px}
+.toc b{font-size:13px;color:var(--ink-3);letter-spacing:.08em}
+.toc ol{margin:6px 0 0;padding-left:22px;columns:2;column-gap:28px}
+@media (max-width:560px){.toc ol{columns:1}}
+.toc li{margin:2px 0;break-inside:avoid}
+.toc a{text-decoration:none;font-weight:500}
+section.c{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 18px;margin-bottom:18px;box-shadow:var(--shadow);scroll-margin-top:12px}
+section.c>h2{font-family:var(--f-display);font-size:23px;margin:0 0 10px;display:flex;align-items:baseline;gap:10px}
+section.c>h2 .n{font-family:var(--f-mono);font-size:14px;color:var(--purple);background:var(--purple-soft);border-radius:8px;padding:1px 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p{margin:0 0 10px}
+ul,ol{margin:0 0 10px;padding-left:22px}
+li{margin:3px 0}
+.shot{margin:12px auto 6px;max-width:380px}
+.shot img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}
+.shot figcaption{font-size:12.5px;color:var(--ink-3);text-align:center;margin-top:6px}
+.tip{background:var(--accent-soft);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.tip b{color:var(--accent)}
+.warn{background:var(--reach-soft);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:15px}
+.warn b{color:var(--reach)}
+.steps{counter-reset:s;list-style:none;padding:0;display:grid;gap:8px}
+.steps li{counter-increment:s;position:relative;padding:10px 12px 10px 48px;background:var(--surface-2);border-radius:12px;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--purple);color:#fff;font-weight:700;font-size:14px;display:grid;place-items:center}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:8px 0 12px}
+th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{font-size:13px;color:var(--ink-3);font-weight:600}
+td.m{font-family:var(--f-mono);white-space:nowrap}
+.tw{overflow-x:auto}
+.pill{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:1px 10px;white-space:nowrap}
+.p0{background:var(--safe-soft);color:var(--safe)}.p1{background:var(--fit-soft);color:var(--fit)}.p2{background:var(--try-soft);color:var(--try)}.p3{background:var(--reach-soft);color:var(--reach)}
+.p9{background:linear-gradient(135deg,#1B1446,#4B2C8F);color:#FFE9A8}
+.tg{display:inline-block;font-size:12.5px;font-weight:700;padding:1px 9px;white-space:nowrap}
+.tg0{border:1.5px solid #1F3A8A;color:#1F3A8A;background:#E4EAFB}
+.tg1{border-radius:999px;background:#7B3FBF;color:#fff;padding:1px 12px}
+.tg2{background:#C9601A;color:#fff;padding:2px 14px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%)}
+.tgp{background:#C62828;color:#fff;border-radius:3px}
+.tgs{background:var(--reach-soft);color:var(--reach)}
+.tgr{border:1px dashed var(--safe);color:var(--safe);border-radius:4px}
+.star{color:#E0A800}
+.smin{display:inline-block;font-size:13px;font-weight:600;color:var(--star);background:var(--star-soft);border-radius:6px;padding:1px 8px}
+.card-ex{display:inline-block;width:22px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px}
+dl.faq dt{font-weight:700;margin-top:14px}
+dl.faq dd{margin:4px 0 0;color:var(--ink-2)}
+.foot{font-size:13px;color:var(--ink-3);text-align:center;margin-top:26px}
+.totop{position:fixed;right:14px;bottom:14px;background:var(--purple);color:#fff;text-decoration:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;box-shadow:var(--shadow)}
+@media print{.totop,.back{display:none}section.c{box-shadow:none;break-inside:avoid-page}body{background:#fff}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><img src="data:image/png;base64,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" alt="올케어에듀학원 로고"><div><b>올케어에듀학원</b><span>ALLCARE EDU</span></div></div>
+    <a class="back" href="../">← 입시 시뮬로 돌아가기</a>
+  </div>
+
+  <h1>입시 시뮬 사용설명서</h1>
+  <p class="lead">고1·고2가 지금 성적으로 갈 수 있는 대학을 수시와 정시로 함께 보는 도구입니다. 처음 쓰는 학생은 「1. 시작하기」부터 차례로 보세요. 궁금한 부분만 찾을 때는 아래 목차를 누르면 됩니다.</p>
+
+  <nav class="toc" aria-label="목차"><b>목차</b>
+    <ol>
+      <li><a href="#start">시작하기</a></li>
+      <li><a href="#common">이름·학년·농어촌</a></li>
+      <li><a href="#jungsi">정시 탭</a></li>
+      <li><a href="#susi">수시 탭: 성적 넣기</a></li>
+      <li><a href="#filter">수시 탭: 보고 싶은 대학 고르기</a></li>
+      <li><a href="#six">수시 6장 조합</a></li>
+      <li><a href="#list">대학 목록·논술·목표 대학</a></li>
+      <li><a href="#overview">한눈에 탭</a></li>
+      <li><a href="#judge">판정 기준</a></li>
+      <li><a href="#faq">자주 묻는 질문</a></li>
+    </ol>
+  </nav>
+
+  <section class="c" id="start">
+    <h2><span class="n">1</span>시작하기</h2>
+    <ol class="steps">
+      <li>이름·학년·농어촌 해당 여부를 고릅니다.</li>
+      <li><b>정시 탭</b>에 최근 모의고사(학력평가) 원점수를 넣습니다.</li>
+      <li><b>수시 탭</b>에 학기별 내신 평균을 넣습니다.</li>
+      <li>수시 탭에서 볼 전형·생기부 묶음·지역을 고르고, 6장 조합과 대학 목록을 봅니다.</li>
+      <li><b>한눈에 탭</b>에서 수시와 정시를 나란히 놓고 어느 쪽이 유리한지 봅니다.</li>
+    </ol>
+    <div class="tip"><b>입력한 성적은 지금 쓰는 휴대폰(또는 컴퓨터)의 브라우저에만 저장됩니다.</b> 서버로 보내지 않습니다. 다음에 같은 기기, 같은 브라우저로 열면 그대로 남아 있고, 다른 기기에서 열면 다시 넣어야 합니다.</div>
+    <p>주소는 두 가지입니다.</p>
+    <ul>
+      <li><b>jungsi.allcare-edu.com/ipsi/</b> : 수시+정시 통합판 (이 설명서가 다루는 화면)</li>
+      <li><b>jungsi.allcare-edu.com</b> : 정시만 보는 화면. 정시 탭과 같은 내용이고 입력한 점수도 같이 씁니다.</li>
+    </ul>
+  </section>
+
+  <section class="c" id="common">
+    <h2><span class="n">2</span>이름·학년·농어촌</h2>
+    <figure class="shot"><img src="img/01_top.jpg" alt="맨 위 화면: 학년 띠, 이름 입력, 학년 선택, 농어촌 선택, 한눈에·수시·정시 탭" loading="lazy" width="430" height="1000"><figcaption>맨 위 화면. 고1을 고르면 보라색 띠가 뜹니다.</figcaption></figure>
+    <ul>
+      <li><b>이름</b> : 비워도 됩니다. 상담할 때 화면 캡처를 구분하는 용도입니다.</li>
+      <li><b>학년</b> : 2026년 기준 학년입니다. 고2는 2028 대입, 고1은 2029 대입 기준으로 바뀝니다. 학년에 따라 넣을 수 있는 학기와 고를 수 있는 모의고사가 달라집니다.</li>
+      <li><b>농어촌 특별전형</b> : 해당하면 농어촌 전형도 목록에 함께 나오고 <span class="tg tgr">농어촌</span> 표시가 붙습니다. 해당 여부는 거주·재학 기간 조건이 있으니 학교에 확인하세요.</li>
+    </ul>
+    <p>그 아래 <b>한눈에 · 수시 · 정시</b> 버튼으로 화면을 바꿉니다.</p>
+  </section>
+
+  <section class="c" id="jungsi">
+    <h2><span class="n">3</span>정시 탭</h2>
+    <figure class="shot"><img src="img/10_j_input.jpg" alt="정시 성적 입력 칸" loading="lazy"><figcaption>시험을 고르고 원점수를 넣으면 과목마다 등급이 바로 나옵니다.</figcaption></figure>
+    <h3>성적 넣기</h3>
+    <ol>
+      <li><b>모의고사</b> : 성적표에 있는 시험(월)을 고릅니다.</li>
+      <li><b>원점수</b> : 국어·수학·영어·한국사·통합사회·통합과학 원점수를 넣습니다. 통합사회·통합과학은 50점 만점, 0.5점 단위입니다.</li>
+      <li>성적표가 있으면 「+ 성적표 표준점수·백분위로 바꾸기」를 눌러 표준점수와 백분위를 그대로 넣을 수 있습니다. 원점수로 추정한 값보다 정확합니다.</li>
+    </ol>
+    <h3>희망 계열·지역</h3>
+    <ul>
+      <li><b>희망 계열</b>은 여러 개 고를 수 있습니다. 「여대만」을 같이 누르면 고른 계열 중 서울권 여대만 나옵니다.</li>
+      <li><b>희망 학과 검색</b>에 「간호」「컴퓨터」처럼 넣으면 그 이름이 들어간 학과만 봅니다.</li>
+      <li><b>지역</b>은 처인구에서 다니기 좋은 서울·경기인천·충청세종이 기본으로 켜져 있습니다.</li>
+    </ul>
+    <h3>수능 환산 보정</h3>
+    <p>학력평가는 재학생만 보지만, 실제 수능에는 졸업생이 함께 들어옵니다. 같은 실력이어도 수능 백분위가 내려가는 편이라 <b>백분위 평균 −3</b>을 기본으로 둡니다. 보정은 국수탐 평균에만 적용되고, 과목별 등급은 바뀌지 않습니다.</p>
+    <h3>결과 보기</h3>
+    <figure class="shot"><img src="img/11_j_pos.jpg" alt="정시 내 위치" loading="lazy"><figcaption>내 위치: 국·수·탐 백분위 평균과 판정 분포</figcaption></figure>
+    <ul>
+      <li><b>과목별 환산 성적표</b> : 원점수를 2028 통합수능 기준 표준점수·백분위·등급으로 바꾼 표입니다.</li>
+      <li><b>군별 지원 후보</b> : 가·나·다군마다 상향·소신·적정·안정을 2개씩 골라 줍니다. 정시는 군마다 한 곳씩, 모두 3장을 씁니다.</li>
+      <li><b>대학별 정시 70% 컷과 비교</b> : 대학들이 공개한 합격자 70% 컷을 2028 기준으로 바꿔 내 점수와 비교한 전체 목록입니다.</li>
+    </ul>
+    <figure class="shot"><img src="img/12_j_gun.jpg" alt="정시 군별 지원 후보" loading="lazy"><figcaption>군별 지원 후보. 오른쪽 숫자가 2028 기준으로 바꾼 70% 컷입니다.</figcaption></figure>
+  </section>
+
+  <section class="c" id="susi">
+    <h2><span class="n">4</span>수시 탭: 성적 넣기</h2>
+    <figure class="shot"><img src="img/20_s_input.jpg" alt="수시 성적 입력 칸" loading="lazy"><figcaption>학기별 내신, 수능 최저 판정 등급, 볼 전형, 생기부 묶음, 지역</figcaption></figure>
+    <h3>학기별 내신 (5등급제)</h3>
+    <ul>
+      <li>성적표의 학기 평균(1.00~5.00)을 <b>전과목 · 국영수사 · 국영수과</b> 세 칸에 넣습니다. 국영수사의 사회에는 한국사가 들어갑니다.</li>
+      <li><b>*</b> 표시가 붙은 학기는 이미 끝난 학기라 꼭 넣어야 합니다. 아직 오지 않은 학기는 잠겨 있습니다.</li>
+      <li>세 평균이 서로 너무 다르거나(1.5 넘게 차이) 범위를 벗어나면 빨간 칸으로 알려 줍니다.</li>
+      <li>학기 평균을 모르면 「+ 과목별 등급으로 학기 평균 계산하기」를 눌러 과목·학점·등급을 넣으면 평균을 계산해 줍니다.</li>
+      <li><b>대학 컷과 비교할 내신</b>은 보통 「계열에 맞춰 자동」으로 둡니다. 인문계 학과는 국영수사, 자연계 학과는 국영수과로 비교합니다.</li>
+    </ul>
+    <h3>수능 최저 판정용 모의고사 등급</h3>
+    <p><b>정시 탭에 넣은 점수에서 자동으로 들어갑니다.</b> 칸이 회색으로 잠겨 있으면 정상입니다. 등급을 바꾸려면 정시 탭에서 원점수를 고치면 됩니다. 정시 탭에 점수가 없을 때만 여기서 직접 고를 수 있습니다.</p>
+    <p>「수능은 학평보다 어렵게 보고 싶을 때 (선택)」을 고르면 최저 판정만 더 엄격하게 볼 수 있습니다. 기본은 「보정 없음」이라 정시 탭 등급과 똑같습니다.</p>
+  </section>
+
+  <section class="c" id="filter">
+    <h2><span class="n">5</span>수시 탭: 보고 싶은 대학 고르기</h2>
+    <figure class="shot"><img src="img/23_s_filter.jpg" alt="볼 전형 버튼들" loading="lazy"><figcaption>노란 「★ 최저유무」 스위치를 켠 모습</figcaption></figure>
+    <h3>★ 최저유무 (노란 스위치)</h3>
+    <ul>
+      <li><b>켬</b> : 수능 최저가 <b>있는</b> 전형만 보입니다. 이름 앞에 <span class="star">★</span>이 붙습니다.</li>
+      <li><b>끔</b> : 수능 최저가 <b>없는</b> 전형만 보입니다. 처음에는 꺼져 있습니다.</li>
+      <li>목록, 6장 조합, 논술에 모두 똑같이 적용됩니다. 최저를 확인하지 못한 전형은 「끔」 쪽에 들어갑니다.</li>
+    </ul>
+    <div class="tip"><b>쓰는 법</b> : 먼저 꺼진 상태로 최저 없는 전형을 보고, 켜서 최저 있는 전형도 보세요. 같은 대학이라도 최저가 있는 교과전형은 컷이 낮은 편이라, 모의고사가 받쳐 주면 더 좋은 대학을 노릴 수 있습니다.</div>
+    <h3>전형 종류</h3>
+    <p><span class="tg tg0">교과</span> 학생부교과 · <span class="tg tg1">종합</span> 학생부종합 · <span class="tg tg2">논술</span> 논술. 버튼을 눌러 켜고 끕니다. 모양이 달라 카드와 목록에서도 바로 구별됩니다.</p>
+    <h3>&lt;일부반영&gt; 학과만</h3>
+    <p>학생부에서 상위 몇 과목만 골라 계산하는 대학입니다(예: 우송대 12과목). 공개 컷이 전 과목 평균보다 좋게 나오므로, 실제로는 컷보다 쉬울 수 있습니다. 이 버튼을 켜면 이런 학과만 봅니다. 목록에서는 <span class="tg tgp">&lt;일부반영&gt;</span>으로 표시합니다.</p>
+    <h3>생기부 묶음</h3>
+    <p>같은 묶음의 학과는 대학이 권장하는 과목이 같아서, 한 생기부로 함께 지원할 수 있습니다(경희·고려·성균관·연세·중앙대 공동연구의 학문 분야 기준). 여러 개를 고를 수 있고, 고르면 아래 회색 상자에 그 묶음의 권장 과목이 나옵니다. 자유전공·광역은 어느 묶음을 골라도 함께 보입니다.</p>
+    <h3>희망 학과 검색 · 지역</h3>
+    <p>정시 탭과 같은 방식입니다.</p>
+  </section>
+
+  <section class="c" id="six">
+    <h2><span class="n">6</span>수시 6장 조합</h2>
+    <figure class="shot"><img src="img/22_s_six.jpg" alt="수시 6장 조합 예시" loading="lazy"><figcaption>최저유무를 끈 상태의 6장</figcaption></figure>
+    <p>위에서 고른 전형·생기부 묶음·지역 안에서, 서로 다른 대학으로 6장을 골라 줍니다.</p>
+    <h3>몇 장씩 고르나</h3>
+    <div class="tw"><table>
+      <tr><th>경우</th><th>조합</th></tr>
+      <tr><td>기본</td><td><span class="pill p3">상향</span> 1 · <span class="pill p2">소신</span> 1 · <span class="pill p1">적정</span> 3 · <span class="pill p0">안정</span> 1</td></tr>
+      <tr><td>정시 수준이 수시와 비슷하거나 더 좋을 때</td><td><span class="pill p3">상향</span> 2 · <span class="pill p2">소신</span> 2 · <span class="pill p1">적정</span> 1 · <span class="pill p0">안정</span> 1</td></tr>
+    </table></div>
+    <p>내신과 정시를 각각 「상위 몇 %」로 바꿔 비교합니다. 정시가 받쳐 주면 수시에서 더 위를 노리는 편이 낫기 때문입니다. 정시 탭이 비어 있으면 기본 조합으로 짭니다. 카드 위 한 줄에 어느 조합으로 짰는지 나옵니다.</p>
+    <h3>카드 색</h3>
+    <ul>
+      <li><span class="card-ex" style="background:#0E7A5F"></span><b>초록 채움</b> = 안정 · <span class="card-ex" style="background:#2A40A0"></span><b>파랑 채움</b> = 적정</li>
+      <li><span class="card-ex" style="border:2px solid var(--try)"></span><b>노랑 테두리</b> = 소신 · <span class="card-ex" style="border:2px solid var(--reach)"></span><b>주황 테두리</b> = 상향</li>
+      <li><span class="card-ex" style="border:2px dashed #6A4BC4"></span><b>보라 점선</b> = <span class="pill p9">우주상향</span></li>
+    </ul>
+    <h3>우주상향</h3>
+    <p>상향에 넣을 학과가 하나도 없으면, 불가능으로 빼 둔 곳 중 내 성적과 가장 가까운 곳을 「우주상향」으로 넣습니다. 합격 가능성은 낮지만 한 장쯤 꿈을 걸어 볼 곳입니다.</p>
+    <h3>최저가 있는 카드</h3>
+    <figure class="shot"><img src="img/24_s_six_min.jpg" alt="최저 기준이 표시된 6장" loading="lazy"><figcaption>최저유무를 켜면 카드마다 최저 기준과 충족 여부가 나옵니다.</figcaption></figure>
+    <p>노란 줄의 <span class="smin">★ 최저 국·수·영·탐 2개 합 6 · 지금 충족</span>은 이 전형의 수능 최저 기준과, 지금 모의고사 등급으로 맞추는지를 보여 줍니다. 「2개 합 6」은 국·수·영·탐 중 두 영역 등급을 더해 6 이하이면 된다는 뜻입니다. 최저를 못 맞추는 전형은 6장에서 뺍니다.</p>
+    <p>6장에는 특목·자사 중심 전형과 뽑는 인원이 아주 적은 학과도 넣지 않습니다. 이런 곳은 아래 목록에서 따로 볼 수 있습니다.</p>
+  </section>
+
+  <section class="c" id="list">
+    <h2><span class="n">7</span>대학 목록 · 논술 · 목표 대학</h2>
+    <h3>교과·종합 70% 컷과 비교</h3>
+    <ul>
+      <li>대학들이 공개한 합격자 70% 컷(9등급제)을 5등급제로 바꿔 내 내신과 비교한 목록입니다.</li>
+      <li><b>판정</b> 버튼으로 안정·적정·소신·상향·최저 미충족만 골라 볼 수 있습니다.</li>
+      <li><b>범위</b>는 「내 내신 근처」가 기본입니다. 컷보다 0.5 넘게 좋은(지나치게 안정인) 곳은 빼고 보여 줍니다. 「전체」를 누르면 다 나옵니다.</li>
+      <li>대학 이름 앞 <b>☆</b>를 누르면 목표 대학으로 담깁니다.</li>
+    </ul>
+    <p>목록에 붙는 표시는 다음과 같습니다.</p>
+    <div class="tw"><table>
+      <tr><th>표시</th><th>뜻</th></tr>
+      <tr><td><span class="tg tgs">특목·자사 중심</span> <span class="tg" style="background:var(--try-soft);color:var(--try)">외고·자사 다수</span></td><td>합격자 중 특목고·자사고 비율이 높다고 알려진 종합전형. 공개 컷이 일반고 학생에게는 실제보다 쉬워 보일 수 있습니다.</td></tr>
+      <tr><td><span class="tg tgp">&lt;일부반영&gt;</span></td><td>일부 과목만 반영하는 대학</td></tr>
+      <tr><td><span class="tg tgr">농어촌</span></td><td>농어촌 특별전형</td></tr>
+      <tr><td>보정</td><td>종합전형 컷에 일반고 기준 보정(+0.3)을 한 값</td></tr>
+    </table></div>
+    <h3>논술 전형</h3>
+    <p>논술은 내신 컷 대신 <b>경쟁률과 최저 충족 여부</b>로 보여 줍니다. 「최저 충족」만 보거나 「최저 없음」만 볼 수 있습니다. 내신보다 논술 실력과 최저가 합격을 가릅니다.</p>
+    <h3>목표 대학까지 남은 등급·점수</h3>
+    <p>☆로 담은 대학을 고르면, 남은 학기에 평균 몇 등급을 받아야 컷에 닿는지(수시), 백분위를 얼마나 올려야 하는지(정시) 계산해 줍니다. 학기 목표를 세울 때 쓰세요.</p>
+  </section>
+
+  <section class="c" id="overview">
+    <h2><span class="n">8</span>한눈에 탭</h2>
+    <figure class="shot"><img src="img/02_overview.jpg" alt="한눈에 탭 내 위치" loading="lazy"><figcaption>왼쪽(위)은 수시, 오른쪽(아래)은 정시</figcaption></figure>
+    <ul>
+      <li><b>수시</b> : 내신(5등급제)과 9등급 환산값, 판정 분포.</li>
+      <li><b>정시</b> : 국·수·탐 백분위 평균, 과목별 등급·백분위, 판정 분포.</li>
+      <li>아래에 수시 6장과 정시 군별 후보를 함께 보여 줍니다.</li>
+    </ul>
+    <div class="tip"><b>수시·정시 중 어느 쪽이 유리할까</b> : 판정 분포에서 「적정」 이상 대학 수준을 비교합니다. 정시 적정 대학이 수시 적정 대학보다 높으면 정시 강세, 반대면 수시 강세입니다. 수시는 정시로 갈 수 있는 대학보다 한 단계 위를 노리는 것이 원칙입니다.</div>
+  </section>
+
+  <section class="c" id="judge">
+    <h2><span class="n">9</span>판정 기준</h2>
+    <h3>수시 (교과·종합)</h3>
+    <p>내 내신을 9등급으로 바꿔 대학 70% 컷으로 나눈 값(비율)으로 판정합니다. 1보다 작을수록 컷보다 좋은 성적입니다.</p>
+    <div class="tw"><table>
+      <tr><th>판정</th><th>교과</th><th>종합</th></tr>
+      <tr><td><span class="pill p0">안정</span></td><td class="m">0.90 이하</td><td class="m">0.88 이하</td></tr>
+      <tr><td><span class="pill p1">적정</span></td><td class="m">1.00 이하</td><td class="m">1.00 이하</td></tr>
+      <tr><td><span class="pill p2">소신</span></td><td class="m">1.075 이하</td><td class="m">1.10 이하</td></tr>
+      <tr><td><span class="pill p3">상향</span></td><td class="m">1.15 이하</td><td class="m">1.20 이하</td></tr>
+      <tr><td>불가능 (숨김)</td><td class="m">1.15 초과</td><td class="m">1.20 초과</td></tr>
+    </table></div>
+    <p>예: 컷이 9등급 2.00인 교과전형이면, 내 9등급 환산이 2.30을 넘을 때 불가능으로 보고 목록에서 뺍니다. 종합은 서류 평가가 있어 폭을 조금 넓게 잡았습니다.</p>
+    <h3>정시</h3>
+    <div class="tw"><table>
+      <tr><th>판정</th><th>내 점수 − 70% 컷 (백분위)</th></tr>
+      <tr><td><span class="pill p0">안정</span></td><td>3 이상 높음</td></tr>
+      <tr><td><span class="pill p1">적정</span></td><td>0 ~ 3</td></tr>
+      <tr><td><span class="pill p2">소신</span></td><td>−3 ~ 0</td></tr>
+      <tr><td><span class="pill p3">상향</span></td><td>−6 ~ −3</td></tr>
+    </table></div>
+    <div class="warn"><b>알아 둘 점</b> : 컷은 2026학년도 입시 결과(대학 공개 자료)이고, 고1·고2가 실제로 치를 입시는 2028·2029학년도입니다. 모집 인원·전형 방법·최저가 바뀔 수 있으니, 원서를 쓰기 전에는 꼭 그해 모집요강으로 확인하세요. 시뮬은 방향을 잡는 참고 자료입니다.</div>
+  </section>
+
+  <section class="c" id="faq">
+    <h2><span class="n">10</span>자주 묻는 질문</h2>
+    <dl class="faq">
+      <dt>점수를 넣었는데 등급이 이상하게 나와요.</dt>
+      <dd>먼저 정시 탭의 <b>모의고사(월)</b>가 성적표와 같은지 보세요. 시험마다 등급컷이 다릅니다. 원점수를 잘못 넣지 않았는지도 확인하세요. 성적표가 있으면 「성적표 표준점수·백분위로 바꾸기」로 넣는 것이 가장 정확합니다.</dd>
+      <dt>수시 탭의 모의고사 등급 칸이 안 바뀌어요.</dt>
+      <dd>정시 탭 점수에서 자동으로 들어가도록 잠겨 있습니다. 정시 탭에서 원점수를 고치면 바로 바뀝니다.</dd>
+      <dt>최저 있는 대학이 하나도 안 보여요.</dt>
+      <dd>노란 「★ 최저유무」 스위치가 꺼져 있으면 최저 없는 전형만 보입니다. 스위치를 켜세요.</dd>
+      <dt>6장에 카드가 비어 있어요.</dt>
+      <dd>고른 조건(전형·생기부 묶음·지역) 안에 해당 학과가 없는 경우입니다. 생기부 묶음이나 지역을 더 고르거나, 전형 버튼을 더 켜 보세요.</dd>
+      <dt>다른 휴대폰에서 열었더니 성적이 없어요.</dt>
+      <dd>성적은 그 기기의 브라우저에만 저장됩니다. 새 기기에서는 다시 넣어야 합니다. 카카오톡 안의 브라우저와 크롬·사파리도 서로 다른 브라우저라 따로 저장됩니다.</dd>
+      <dt>성적을 지우고 싶어요.</dt>
+      <dd>입력 칸을 비우거나 다른 값으로 덮어쓰면 됩니다. 브라우저의 방문 기록(사이트 데이터)을 지워도 지워집니다.</dd>
+    </dl>
+  </section>
+
+  <p class="foot">올케어에듀학원 · 입시 시뮬 사용설명서 · 2026년 11월<br><a href="../">입시 시뮬로 돌아가기</a> · <a href="/">정시만 보기</a></p>
+</div>
+<a class="totop" href="#">↑ 목차</a>
+</body>
+</html>

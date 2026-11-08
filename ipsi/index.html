@@ -297,6 +297,9 @@ td.cs b{font-weight:600}
 .sj small{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3)}
 .ddays{display:grid;gap:8px;text-align:right}
 .ddays b{font-size:24px}
+.guidebtn{margin-left:auto;align-self:center;font-size:13.5px;font-weight:600;padding:8px 16px;border-radius:999px;border:1.5px solid var(--accent);color:var(--accent);background:var(--surface);text-decoration:none;white-space:nowrap}
+.guidebtn::before{content:"? ";font-weight:700}
+.guidebtn:hover{background:var(--accent);color:var(--surface)}
 .lead{font-size:13.5px;color:var(--ink-2);margin:0 0 12px;max-width:70ch}
 </style>
 
@@ -320,7 +323,7 @@ td.cs b{font-weight:600}
       <div class="seg" id="sh-rural" role="group" aria-label="농어촌 해당 여부"><button type="button" data-v="1">해당</button><button type="button" data-v="0">비해당</button></div></div>
   </form>
 
-  <nav class="modes" id="modes" aria-label="화면 선택" style="margin:16px 0 0"><button type="button" data-v="overview" aria-pressed="true">한눈에</button><button type="button" data-v="susi">수시</button><button type="button" data-v="jungsi">정시</button></nav>
+  <nav class="modes" id="modes" aria-label="화면 선택" style="margin:16px 0 0"><button type="button" data-v="overview" aria-pressed="true">한눈에</button><button type="button" data-v="susi">수시</button><button type="button" data-v="jungsi">정시</button><a class="guidebtn" href="https://jungsi.allcare-edu.com/ipsi/guide/" target="_blank" rel="noopener">사용설명서</a></nav>
 
   <section id="app-overview" class="stack" style="margin-top:16px">
     <section class="card" aria-labelledby="h-ov">
@@ -333,7 +336,7 @@ td.cs b{font-weight:600}
       <section class="card" aria-labelledby="h-ov-s">
         <div class="ov-head"><h2 id="h-ov-s">수시 6장 조합 예시</h2><a href="#susi">수시 자세히 →</a></div>
         <div class="six" id="ov-six"></div>
-        <p class="note">수시 탭에서 고른 전형·계열·지역 기준. 상향 2 · 소신 2 · 적정 1 · 안정 1, 최저 미충족·소수 인원 제외.</p>
+        <p class="note">수시 탭에서 고른 전형·생기부 묶음·지역 기준. 기본은 상향 1 · 소신 1 · 적정 3 · 안정 1, 정시가 수시와 비슷하거나 더 좋으면 상향 2 · 소신 2 · 적정 1 · 안정 1. 최저 미충족·소수 인원 제외.</p>
       </section>
       <section class="card" aria-labelledby="h-ov-j">
         <div class="ov-head"><h2 id="h-ov-j">정시 군별 지원 후보</h2><a href="#jungsi">정시 자세히 →</a></div>
