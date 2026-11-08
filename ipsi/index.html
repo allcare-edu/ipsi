@@ -1079,7 +1079,9 @@ function engG(r){if(r===""||r==null||isNaN(r))return null;r=+r;return r>=90?1:Ma
 function hisG(r){if(r===""||r==null||isNaN(r))return null;r=+r;var c=[40,35,30,25,20,15,10,5];for(var i=0;i<8;i++)if(r>=c[i])return i+1;return 9;}
 var EXN={jun:"6월",sep:"9월",oct:"10월"};
 function fromJungsi(){var j=load(KEY28);if(!j||!j.grade||!j.exam)return null;var t=C[j.grade+"_"+j.exam];if(!t)return null;var adj=+st.adj||0;
-  function g(key,raw,ovp){var p=pctOf(t[key],raw,ovp);return p==null?null:gByPct(Math.max(0,p+adj));}
+  function g(key,raw,ovp){var tt=t[key];var hasP=ovp!==""&&ovp!=null&&!isNaN(ovp);
+    if(!adj&&!hasP&&tt&&tt.cuts&&raw!==""&&raw!=null&&!isNaN(raw)){var r=+raw,c=tt.cuts.map(function(x){return x.slice();}).sort(function(x,y){return y[0]-x[0];});for(var i=0;i<c.length;i++)if(r>=c[i][0])return i+1;return 9;}
+    var p=pctOf(tt,raw,ovp);return p==null?null:gByPct(Math.max(0,p+adj));}
   return {g:{K:g("kor",j.kraw,j.kpct),M:g("math",j.mraw,j.mpct),E:engG(j.eraw),C:g("soc",j.t1raw,j.t1pct),S:g("sci",j.t2raw,j.t2pct),H:hisG(j.hraw)},name:j.name,grade:j.grade,exam:j.exam};}
 
 /* ---------- 최저 ---------- */

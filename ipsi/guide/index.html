@@ -39,6 +39,15 @@ a{color:var(--accent)}
 .back{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px;text-decoration:none;background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px}
 h1{font-family:var(--f-display);font-size:clamp(28px,7vw,38px);line-height:1.25;margin:6px 0 8px;letter-spacing:-.01em}
 .cheoin{display:inline-block;vertical-align:middle;font-family:var(--f-body);font-size:.5em;font-weight:700;color:#5E5410;background:#FBF6D2;border:1.5px solid #DECA2B;border-radius:8px;padding:3px 10px;position:relative;top:-3px;white-space:nowrap}
+.letter{position:relative;background:var(--surface);border:1px solid var(--line);border-top:4px solid #DECA2B;border-radius:16px;padding:22px 20px 20px;margin:4px 0 20px;box-shadow:var(--shadow)}
+.letter .kick{font-size:12px;letter-spacing:.14em;color:var(--ink-3);font-weight:600;margin:0 0 6px}
+.letter h2{font-family:var(--f-display);font-size:clamp(21px,5.4vw,26px);line-height:1.4;margin:0 0 14px;color:var(--ink)}
+.letter p{color:var(--ink-2);margin:0 0 12px;line-height:1.85}
+.letter p b{color:var(--ink)}
+.letter .q{border-left:3px solid #DECA2B;padding:2px 0 2px 14px;margin:16px 0;color:var(--ink);font-weight:600}
+.letter .sign{display:flex;justify-content:flex-end;align-items:baseline;gap:10px;margin-top:16px;flex-wrap:wrap}
+.letter .sign span{font-size:12.5px;color:var(--ink-3)}
+.letter .sign b{font-family:var(--f-display);font-size:20px;color:var(--ink)}
 .only{background:#FBF6D2;border:1.5px solid #DECA2B;border-radius:14px;padding:12px 16px;margin:0 0 18px;color:#3A3300}
 .only b{color:#5E5410}
 .lead{color:var(--ink-2);margin:0 0 18px}
@@ -98,6 +107,17 @@ dl.faq dd{margin:4px 0 0;color:var(--ink-2)}
   </div>
 
   <h1>입시 시뮬 <span class="cheoin">&lt;처인고 전용&gt;</span><br>사용설명서</h1>
+  <article class="letter" aria-labelledby="letter-h">
+    <p class="kick">만든 사람의 말</p>
+    <h2 id="letter-h">갈 수 있는 길은 분명히 있습니다.<br>다만 보이지 않았을 뿐입니다.</h2>
+    <p>저는 서울에서 태어나, 이곳으로 이사 오기 전까지 평생을 서울에서만 살았습니다. 그런데 우리 아이들이 학창 시절을 고스란히 보낸 한숲에 어느새 적잖이 정이 들었습니다.</p>
+    <p>2024년 9월 학원을 열고 3년 동안 학생들을 가르치며 느낀 것이 있습니다. 대치·목동·분당 같은 학군지와 비교할 때 한숲시티에 가장 부족한 것은 <b>학생들의 실력도, 의지도 아닌 입시 정보</b>였습니다. 대학에 갈 수 있는 길은 두고 안 되는 길만 붙들다 보니, 학생은 지치고 끝내 포기하는 안타까운 모습을 너무 많이 보았습니다.</p>
+    <p>이런 빈틈을 이용하는 일부 학원과 공부방, 과외도 적지 않았습니다. 고3 문과 여학생들을 부추겨 내신 시험과도 상관없는 공부로 3학년 1학기와 그 앞 겨울방학을 보내게 하고, 수능 최저를 맞출 마지막 기회마저 놓치게 만드는 경우를 보았습니다. 수강생이 줄어들면 예비 고1 신입생을 받으려고, 1학기 기말고사가 끝나고 수시 원서를 쓸 무렵 예고도 없이 수업을 닫아 버려 수학 중심으로 계획을 세웠던 학생들을 큰 혼란에 빠뜨렸다는 이야기도 올해 또 들었습니다. 무엇보다 안타까운 것은 이런 일이 해마다 되풀이된다는 점이었습니다.</p>
+    <p class="q">공부할 의지와 꿈이 있는 학생, 그리고 그 곁의 부모님이 더 이상 이런 일을 겪지 않으시기를 바랐습니다.</p>
+    <p>제대로 된 길을 찾아 희망을 품고 꿈을 이루기를 바라는 마음으로, 지난 15년 동안 학생들을 가르치며 쌓은 경험과 실제 입시 데이터를 바탕으로 이 시뮬을 만들었습니다. 작은 도구이지만, 한숲의 학생들이 자기 길을 조금 더 일찍, 조금 더 분명하게 보는 데 보탬이 되었으면 합니다.</p>
+    <div class="sign"><span>올케어에듀학원 원장</span><b>김영민</b></div>
+  </article>
+
   <p class="lead">고1·고2가 지금 성적으로 갈 수 있는 대학을 수시와 정시로 함께 보는 도구입니다. 처음 쓰는 학생은 「1. 시작하기」부터 차례로 보세요. 궁금한 부분만 찾을 때는 아래 목차를 누르면 됩니다.</p>
 
   <div class="only"><b>처인고 학생에게 맞춘 시뮬입니다.</b> 처인고는 <b>일반고</b>이고 <b>농어촌 특별전형 대상 학교</b>입니다. 그래서 이 시뮬은
