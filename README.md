@@ -5,3 +5,9 @@ jungsi.allcare-edu.com 배포 파일. Netlify가 main 브랜치를 그대로 게
 - `index.html` 고1·고2 통합판(한눈에·수시·정시)
 - `go3/` 고3 정시
 - `susi/` → `/#susi` 로 넘김, `_redirects` susi.allcare-edu.com 처리
+
+## 주소 (2026-11-08부터, GitHub Pages · gh-pages 브랜치)
+- `/` : 고1·고2 정시 시뮬 2028 (정시만, 예전에 공유한 링크 그대로)
+- `/ipsi/` : 입시 시뮬 통합판 (한눈에 · 수시 · 정시)
+- `/susi/` : `/ipsi/#susi`로 이동
+- `/go3/` : 고3 정시 시뮬
