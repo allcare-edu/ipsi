@@ -339,6 +339,10 @@ td.cs b{font-weight:600}
 .guidebtn::before{content:"? ";font-weight:700}
 .guidebtn:hover{background:var(--accent);color:var(--surface)}
 .cheoin{display:inline-block;vertical-align:middle;font-family:var(--f-body);font-size:.42em;font-weight:700;color:var(--brand-ink);background:#FBF6D2;border:1.5px solid var(--brand);border-radius:8px;padding:3px 9px;margin-left:8px;position:relative;top:-3px;white-space:nowrap}
+.catmode{margin-bottom:6px}
+.catmode button{font-weight:600}
+.seg.locked button{cursor:not-allowed}
+.seg.locked button:not([aria-pressed="true"]){opacity:.45}
 .lead{font-size:13.5px;color:var(--ink-2);margin:0 0 12px;max-width:70ch}
 </style>
 
@@ -631,6 +635,8 @@ td.cs b{font-weight:600}
 
         <div class="fgroup">
           <span class="flabel">희망 계열 (여러 개 선택 가능)</span>
+          <div class="seg catmode" id="j-catmode" role="group" aria-label="정시 희망 계열 정하는 방법"><button type="button" data-v="same">1. 수시와 같은 계열</button><button type="button" data-v="own">2. 정시만 따로</button></div>
+          <p class="hint" id="j-catsrc"></p>
           <p class="hint" style="margin-top:-4px">‘여대만’을 함께 누르면 고른 계열 중 서울권 여대만 보여 줍니다. 여대만 누르면 여대 전체 학과가 나옵니다.</p>
           <div class="seg" id="j-cats" role="group" aria-label="희망 계열"></div>
           <label class="mini" for="j-kw">희망 학과 검색<input type="text" id="j-kw" placeholder="예: 컴퓨터, 간호, 국어교육"></label>
@@ -742,7 +748,7 @@ td.cs b{font-weight:600}
 "use strict";
 var D=DATA_J, C=D.cuts;
 var $=function(id){return document.getElementById("j-"+id);};
-window.JUNGSI={get:function(){return st;},seoul:function(){var R=compute();if(R.avg==null)return null;var sv=st.regs;st.regs=[0];var L;try{L=candidates(R);}finally{st.regs=sv;}L=L.filter(function(o){return o.j&&o.j!==BLOCK&&o.d!=null;});var nm=function(o){return o.x.uname+" "+o.x.nm;};var fit=L.filter(function(o){return o.d>=0;}),tr=L.filter(function(o){return o.d>=-3&&o.d<0;});var two=function(arr){var seen={},o=[];arr.forEach(function(x){if(o.length<2&&!seen[x.x.uname]){seen[x.x.uname]=1;o.push(nm(x));}});return o;};var t2=two(fit);if(t2.length<2)t2=t2.concat(two(tr).filter(function(n){return t2.every(function(m){return m.split(" ")[0]!==n.split(" ")[0];});})).slice(0,2);return {fit:fit.length,tr:tr.length,bestFit:fit.length?nm(fit[0]):null,bestTry:tr.length?nm(tr[0]):null,two:t2};}};
+window.JUNGSI={get:function(){return st;},refresh:function(){if(syncCats()){save();render();}},seoul:function(){var R=compute();if(R.avg==null)return null;var sv=st.regs;st.regs=[0];var L;try{L=candidates(R);}finally{st.regs=sv;}L=L.filter(function(o){return o.j&&o.j!==BLOCK&&o.d!=null;});var nm=function(o){return o.x.uname+" "+o.x.nm;};var fit=L.filter(function(o){return o.d>=0;}),tr=L.filter(function(o){return o.d>=-3&&o.d<0;});var two=function(arr){var seen={},o=[];arr.forEach(function(x){if(o.length<2&&!seen[x.x.uname]){seen[x.x.uname]=1;o.push(nm(x));}});return o;};var t2=two(fit);if(t2.length<2)t2=t2.concat(two(tr).filter(function(n){return t2.every(function(m){return m.split(" ")[0]!==n.split(" ")[0];});})).slice(0,2);return {fit:fit.length,tr:tr.length,bestFit:fit.length?nm(fit[0]):null,bestTry:tr.length?nm(tr[0]):null,two:t2};}};
 var T1="통합사회",T2="통합과학";
 var EXAMS={jun:"6월",sep:"9월",oct:"10월"};
 var EXAMPLE={name:"",grade:"g2",exam:"oct",rural:1,kraw:80,mraw:62,eraw:84,hraw:41,t1raw:38,t2raw:36,
@@ -834,9 +840,18 @@ FIELDS.forEach(function(f){var el=$(f);if(!el)return;el.addEventListener(el.tagN
 function single(id,key,num){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;st[key]=num?+b.dataset.v:b.dataset.v;isExample=false;segSet(id,[b.dataset.v]);save();render();});}
 single("grade","grade");single("exam","exam");single("rural","rural",true);single("scope","scope");
 function multi(id,key,num){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var v=num?+b.dataset.v:b.dataset.v;var a=st[key];var i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);isExample=false;segSet(id,a.map(String));save();render();});}
-multi("cats","cats");multi("regs","regs",true);multi("jf","jf");
+multi("cats","cats");
+$("catmode").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;st.catMode=b.dataset.v;isExample=false;save();render();});
+multi("regs","regs",true);multi("jf","jf");
 $("reset").addEventListener("click",function(){st=JSON.parse(JSON.stringify(EXAMPLE));isExample=true;save();fill();render();$("copyst").textContent="예시 점수로 되돌렸습니다";});
 
+var GMAP=[["IT·컴퓨터","자연과학"],["공학"],["공학"],["공학","자연과학"],["자연과학"],["자연과학"],["의약"],["간호/보건"],["인문"],["사회과학"],["경영·경제"],["사회과학","교육"],["자유전공·광역"]];
+function susiSt(){return window.SUSI&&window.SUSI.get?window.SUSI.get():null;}
+function catsFromSusi(){var S=susiSt();if(!S)return null;var o=[];(S.grps||[]).forEach(function(g){(GMAP[g]||[]).forEach(function(c){if(o.indexOf(c)<0)o.push(c);});});if((S.cats||[]).indexOf("여대만")>=0)o.push("여대");return o;}
+function syncCats(){if(st.catMode==null)st.catMode="same";if(st.catMode!=="same")return false;var c=catsFromSusi();if(!c||!c.length)return false;if(JSON.stringify(c)===JSON.stringify(st.cats))return false;st.cats=c;return true;}
+function catUI(){var m=st.catMode||"same",cm=$("catmode");if(!cm)return;[].forEach.call(cm.children,function(b){b.setAttribute("aria-pressed",b.dataset.v===m?"true":"false");});var box=$("cats");box.classList.toggle("locked",m==="same");[].forEach.call(box.querySelectorAll("button"),function(b){b.disabled=m==="same";});segSet("cats",st.cats);
+  var S=susiSt(),GN=(typeof DATA_S!=="undefined"&&DATA_S.GRPS)||[];var gn=S&&S.grps?S.grps.map(function(g){return GN[g];}).filter(Boolean).join(", "):"";
+  $("catsrc").textContent=m==="same"?"수시 탭의 생기부 묶음"+(gn?"("+gn+")":"")+"에 맞춰 정시 계열을 자동으로 고릅니다. 정시 계열을 따로 고르려면 「2. 정시만 따로」를 누르세요.":"정시 계열을 직접 고릅니다. 수시와 맞추려면 「1. 수시와 같은 계열」을 누르세요.";}
 /* ---------- 계산 ---------- */
 var last=null;
 function compute(){
@@ -883,7 +898,7 @@ function gradeUI(){var g1=st.grade==="g1";document.documentElement.setAttribute(
   $("gb-g").textContent=G;$("h1g").textContent=G;$("gb-t").textContent=G+" 화면 · "+(g1?"2029학년도 수능 (2028. 11월)":"2028학년도 수능 (2027. 11월)");
   $("gb-s").textContent="2026 "+EXAMS[st.exam]+" 학력평가("+G+") 등급컷으로 환산 중";
   var tc=document.querySelector('meta[name="theme-color"]');if(tc)tc.setAttribute("content",g1?"#6A3C9E":"#26398C");}
-function render(){gradeUI();
+function render(){syncCats();catUI();gradeUI();
   var R=compute();last=R;
   // 등급 배지
   function badge(id,g){var el=$(id);if(g==null){el.textContent="";el.className="badge";return;}el.textContent=g+"등급";el.className="badge g"+g;}
@@ -1088,7 +1103,7 @@ function load(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return
 var st=load(KEY),fresh=false;
 if(!st||!st.sem||!st.grade){st=JSON.parse(JSON.stringify(EXAMPLE));fresh=true;}
 if(st.adjV!==2){st.adj=0;st.adjV=2;}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}if(window.JUNGSI&&window.JUNGSI.refresh)window.JUNGSI.refresh();}
 var isExample=function(){return !st.name&&JSON.stringify(st.sem)===JSON.stringify(EXAMPLE.sem);};
 
 /* ---------- 5등급 ↔ 9등급 ---------- */
@@ -1507,6 +1522,7 @@ $("copy").addEventListener("click",function(){
 doImport(true);
 buildSem();buildMock();buildCalc();render();
 window.SUSI={get:function(){return st;},reimport:function(){doImport(true);render(true);},advice:advice};
+if(window.JUNGSI&&window.JUNGSI.refresh)window.JUNGSI.refresh();
 })();
 </script>
 <script>
