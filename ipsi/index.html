@@ -283,15 +283,16 @@ td.cs b{font-weight:600}
 .ov-head a:hover{text-decoration:underline}
 .ovkv{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;margin-bottom:12px;align-items:stretch}
 .ovkv .ovadv{grid-column:1/-1}
-.ovsign{display:grid;place-items:center;align-content:center;gap:6px;min-width:64px}
-.ovsign .sg{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-size:34px;font-weight:700;line-height:1;background:var(--accent);color:var(--surface);box-shadow:var(--shadow)}
+.ovsign{display:grid;place-items:center;align-content:center;gap:8px;min-width:96px}
+.ovsign .sg{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-size:34px;font-weight:700;line-height:1;background:#0E7A5F;color:#fff;box-shadow:var(--shadow)}
 .ovsign .sg.q{background:var(--surface-2);color:var(--ink-3);font-size:26px}
-.ovsign small{font-size:12px;font-weight:700;color:var(--accent);white-space:nowrap}
+.ovsign small{font-size:19px;font-weight:700;color:#0E7A5F;white-space:nowrap;font-family:var(--f-display)}
 .ovsign .sgm{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ovsign small{color:#5CCAA9}}:root[data-theme="dark"] .ovsign small{color:#5CCAA9}
 @media (max-width:640px){.ovkv{grid-template-columns:1fr}
   .ovsign{grid-template-columns:auto auto;justify-content:center;gap:10px}
-  .ovsign .sg{display:none}.ovsign .sgm{display:inline-block;font-size:17px;font-weight:700;background:var(--accent);color:var(--surface);border-radius:999px;padding:6px 18px}
-  .ovsign small{display:none}}
+  .ovsign .sg{display:none}.ovsign .sgm{display:inline-block;font-size:17px;font-weight:700;background:#0E7A5F;color:#fff;border-radius:999px;padding:6px 18px}
+  .ovsign small{font-size:20px}}
 .ovadv{display:grid;gap:10px;align-content:start;min-width:0;padding:12px 14px;border:2px solid var(--accent);border-radius:12px;background:var(--accent-soft)}
 .ovadv h3{margin:0;font-family:var(--f-display);font-size:17px;color:var(--accent)}
 .ovadv .verdict{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -309,6 +310,12 @@ td.cs b{font-weight:600}
 .engbox .bn{font-family:var(--f-mono);font-weight:700}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .engbox{background:#3A2E05;color:#F2D27A;border-color:#8A6400}:root:not([data-theme="light"]) .engbox b{color:#FFE9A8}}
 :root[data-theme="dark"] .engbox{background:#3A2E05;color:#F2D27A;border-color:#8A6400}:root[data-theme="dark"] .engbox b{color:#FFE9A8}
+.ex2{display:grid;gap:6px;margin-top:8px}
+.ex2i{display:block;background:var(--surface-2);border-radius:8px;padding:6px 8px;font-size:12.5px;line-height:1.55;color:var(--ink-2)}
+.ex2i b{display:inline!important;font-size:13px!important;color:var(--ink)!important}
+.ex2i b::after{content:none!important}
+.ex2i em{font-style:normal;font-weight:700;color:var(--accent)}
+.ex2i .pill{font-size:11px;padding:1px 7px}
 .advnote{font-size:11.5px;color:var(--ink-3);margin:0}
 .ovcol{display:grid;gap:8px;align-content:start;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 .ovcol h3{margin:0;font-family:var(--f-display);font-size:17px;color:var(--accent)}
@@ -1244,16 +1251,20 @@ function advice(){
   var cand=[];rows.forEach(function(r){var J=judge(r);if(J&&!J.out)cand.push({r:r,rule:csOf(r).rule,J:J});});
   function okWith(M){return cand.filter(function(x){return csEval(x.rule,M).s==="ok";});}
   var now=okWith(G),nowK={};now.forEach(function(x){nowK[x.r.k]=1;});
-  function scen(M){var L=okWith(M),nw=L.filter(function(x){return !nowK[x.r.k];});nw.sort(function(a,b){return a.r.g70-b.r.g70;});var seen={},ex=[];nw.forEach(function(x){if(ex.length<4&&!seen[x.r.u]){seen[x.r.u]=1;ex.push(UV[x.r.u][0]);}});return {n:L.length,add:nw.length,ex:ex};}
+  function scen(M){var L=okWith(M),nw=L.filter(function(x){return !nowK[x.r.k];});nw.sort(function(a,b){return a.r.g70-b.r.g70;});var seen={},ex=[];nw.forEach(function(x){if(ex.length<4&&!seen[x.r.u]){seen[x.r.u]=1;ex.push(UV[x.r.u][0]);}});return {n:L.length,add:nw.length,ex:ex,list:nw};}
+  function pick2(list,how){var seen={},out=[];list.slice().sort(function(a,b){return a.r.g70-b.r.g70;}).forEach(function(x){if(out.length<2&&!seen[x.r.u]&&x.J.j>=1){seen[x.r.u]=1;out.push({u:UV[x.r.u][0],unit:x.r.unit,t:x.r.t,typ:x.r.typ,rule:ruleText(x.rule),j:x.J.j,cut:x.J.cut5,how:how});}});
+    if(out.length<2)list.slice().sort(function(a,b){return a.r.g70-b.r.g70;}).forEach(function(x){if(out.length<2&&!seen[x.r.u]){seen[x.r.u]=1;out.push({u:UV[x.r.u][0],unit:x.r.unit,t:x.r.t,typ:x.r.typ,rule:ruleText(x.rule),j:x.J.j,cut:x.J.cut5,how:how});}});return out;}
   var eng=[];if(G.E!=null&&G.E>=3){[2,3].forEach(function(t){if(t<G.E){var M=Object.assign({},G);M.E=t;eng.push({to:t,s:scen(M)});}});}
   var one=null;[["K","국어를"],["M","수학을"],["T","탐구를"]].forEach(function(a){var M=Object.assign({},G);if(a[0]==="T"){if(M.C==null&&M.S==null)return;if(M.C!=null&&M.C>1)M.C--;if(M.S!=null&&M.S>1)M.S--;}else{if(M[a[0]]==null||M[a[0]]<=1)return;M[a[0]]--;}var r=scen(M);if(!one||r.add>one.s.add)one={nm:a[1],s:r};});
+  var bestS=null,bestHow="";if(eng.length&&eng[0].s.add){bestS=eng[0].s;bestHow="영어 "+eng[0].to+"등급이면 충족";}else if(one&&one.s.add){bestS=one.s;bestHow=one.nm.slice(0,-1)+" 1등급 올리면 충족";}
+  var ex2=pick2(now,"지금 충족");if(bestS){var nx=pick2(bestS.list,bestHow);ex2=nx.concat(ex2).slice(0,2);if(nx.length===1&&ex2.length===2&&ex2[0].u===ex2[1].u)ex2=[nx[0]];}
   var mode=null;
   if(jTop!=null){if(jTop<=sTop*0.85)mode="jungsi";else if(jTop<=sTop*1.25+2)mode="even";else mode="susi";}
   var bestGain=Math.max(eng.length?eng[0].s.add:0,one?one.s.add:0);
   var rec=null;
   if(mode==="jungsi"||mode==="even")rec=1;
   else if(mode==="susi")rec=(now.length>=3||bestGain>=3)?2:3;
-  return {g5:g5,sTop:sTop,jp:jp,jTop:jTop,mode:mode,rec:rec,total:cand.length,now:now.length,eng:eng,engG:G.E,one:one};
+  return {ex2:ex2,g5:g5,sTop:sTop,jp:jp,jTop:jTop,mode:mode,rec:rec,total:cand.length,now:now.length,eng:eng,engG:G.E,one:one};
 }
 /* ---------- 렌더 ---------- */
 function pill(j,no){return no?'<span class="pill p-no">최저 미충족</span>':'<span class="pill p-'+JC[j]+'">'+JN[j]+'</span>';}
@@ -1546,6 +1557,7 @@ function advHtml(A){
         :"지금은 정시가 내신보다 약합니다. 정시는 최저를 맞추는 정도로만 준비하는 편이 낫습니다.";
   var o2="최저가 있는 교과·종합 전형은 같은 대학이라도 컷이 낮은 편입니다. 지금 내신으로 노릴 수 있는 최저 전형 "+A.total+"곳 중 지금 모의고사로 최저를 맞추는 곳은 "+A.now+"곳입니다."+
     (A.total&&A.now/A.total>=0.7?" 대부분 맞추고 있으니 최저 있는 전형을 6장에 적극적으로 넣고, 수능까지 이 등급을 지키세요.":A.total?" 아래처럼 한 과목만 올려도 맞추는 곳이 늘어납니다.":"");
+  if(A.ex2&&A.ex2.length){var JN2=["안정","적정","소신","상향"],JC2=["safe","fit","try","reach"];o2+='<span class="ex2">'+A.ex2.map(function(x){return '<span class="ex2i"><span class="pill p-'+JC2[x.j]+'">'+JN2[x.j]+'</span> <b>'+x.u+' '+x.unit+'</b> · '+x.t+'<br>최저 '+x.rule+' · 내신 컷 '+(x.cut!=null?x.cut.toFixed(2):"–")+' · <em>'+x.how+'</em></span>';}).join("")+'</span>';}
   var o3="정시와 최저 모두 아직 거리가 있습니다. 최저 없는 교과·종합 전형을 중심으로, 남은 학기 내신을 올리는 데 힘을 모으세요.";
   h+='<ol class="advopts">'+[["정시까지 준비하기",o1],["최저를 맞춰 수시를 올리기",o2],["내신에 집중하기",o3]].map(function(x,k){return '<li'+(A.rec===k+1?' class="on"':'')+'><b>'+(k+1)+'. '+x[0]+'</b>'+x[1]+'</li>';}).join("")+'</ol>';
   if(A.eng&&A.eng.length){
