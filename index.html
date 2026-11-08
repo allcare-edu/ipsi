@@ -192,8 +192,27 @@ svg text{font-family:var(--f-body)}
 .mockg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .mockg label{display:grid;gap:2px;font-size:12px;color:var(--ink-3)}
 .mockg select{font-size:15px;padding:6px 8px;font-family:var(--f-mono)}
-.ttag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.02em;padding:0 6px;border-radius:5px;margin-right:4px;border:1px solid currentColor;vertical-align:1px}
-.tt0{color:var(--accent)}.tt1{color:var(--try)}.tt2{color:var(--mark)}.ttr{color:var(--safe)}
+.ttag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.02em;line-height:1.5;padding:1px 8px;margin-right:5px;vertical-align:1px;white-space:nowrap}
+/* 교과 = 각진 직사각형(남색 테두리) · 종합 = 타원 알약(보라 채움) · 논술 = 육각형(주황 채움) */
+:root{--kyo:#1F3A8A;--kyo-soft:#E4EAFB;--jong:#7B3FBF;--non:#C9601A;--card-safe:#0E7A5F;--card-fit:#2A40A0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--kyo:#9FB4F5;--kyo-soft:#1B2547;--jong:#8E55D6;--non:#C9601A;--card-safe:#127A5F;--card-fit:#3149B4}}
+:root[data-theme="dark"]{--kyo:#9FB4F5;--kyo-soft:#1B2547;--jong:#8E55D6;--non:#C9601A;--card-safe:#127A5F;--card-fit:#3149B4}
+.tt0{border-radius:0;border:1.5px solid var(--kyo);color:var(--kyo);background:var(--kyo-soft)}
+.tt1{border-radius:999px;border:1.5px solid var(--jong);color:#fff;background:var(--jong);padding:1px 11px}
+.tt2{border:0;border-radius:0;color:#fff;background:var(--non);padding:2px 13px;clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%)}
+.ttr{border-radius:4px;border:1px dashed var(--safe);color:var(--safe)}
+/* 6장 조합: 안정·적정 카드 전체 채색, 소신·상향은 테두리 */
+.slot.sj0{background:var(--card-safe);color:#fff}
+.slot.sj1{background:var(--card-fit);color:#fff}
+.slot.sj0 .meta,.slot.sj0 .num,.slot.sj1 .meta,.slot.sj1 .num{color:rgba(255,255,255,.9)}
+.slot.sj0 .pill,.slot.sj1 .pill{background:#fff;font-weight:700}
+.slot.sj0 .pill{color:var(--card-safe)}.slot.sj1 .pill{color:var(--card-fit)}
+.slot.sj0 .ttag,.slot.sj1 .ttag{outline:1.5px solid rgba(255,255,255,.9);outline-offset:0}
+.slot.sj0 .tt0,.slot.sj1 .tt0{background:#fff;color:#1F3A8A;border-color:#fff}
+.slot.sj0 .ttr,.slot.sj1 .ttr{background:#fff;color:#0E7A5F;border:1px solid #fff}
+.slot.sj0 .tsp1,.slot.sj0 .tsp2,.slot.sj1 .tsp1,.slot.sj1 .tsp2{background:#fff}
+.slot.sj2{border:2px solid var(--try);background:var(--surface)}
+.slot.sj3{border:2px solid var(--reach);background:var(--surface)}
 td .sub2{display:block;font-size:11.5px;color:var(--ink-3);white-space:normal;max-width:20rem}
 td.cs{white-space:normal;max-width:15rem;font-size:12px;color:var(--ink-2);text-align:left}
 td.cs b{font-weight:600}
@@ -1240,7 +1259,7 @@ function renderNS(){
   var tot=L.length;L=L.slice(0,150);
   $("nslist").innerHTML=st.typs.indexOf(2)<0?'<tr><td colspan="6"><div class="empty">「볼 전형」에서 논술을 켜면 보입니다.</div></td></tr>':L.length?L.map(function(x){var r=x.r,u=UV[r.u],on=st.targets.indexOf(r.k)>=0;
     var me=x.ce.s==="ok"?'<span class="cs-ok">충족</span>':x.ce.s==="none"?'<span class="cs-ok">최저 없음</span>':x.ce.s==="fail"?'<span class="cs-fail">미충족 '+(x.ce.gap>0?"(+"+x.ce.gap+")":"")+(x.ce.extra&&x.ce.extra.length?" "+x.ce.extra.join(", "):"")+'</span>':'<span class="cs-unk">원문 확인</span>';
-    return '<tr'+(x.ce.s==="fail"?' class="blk"':'')+'><td class="l"><button type="button" class="star" data-k="'+r.k+'" aria-pressed="'+on+'" aria-label="목표에 담기">'+(on?"★":"☆")+'</button><span class="u">'+esc(u[0])+'</span> '+esc(r.unit)+'<span class="sub2">'+esc(r.t)+'</span></td><td class="n">'+(r.n27||"–")+'</td><td class="n">'+(r.c27!=null?f1(r.c27):"–")+(r.c26!=null?'<br><span class="d">('+f1(r.c26)+')</span>':"")+'</td><td class="cs">'+esc(r.m||"")+'</td><td class="cs">'+csCell(r,{cs:x.cs,ce:x.ce})+'</td><td class="l">'+me+'</td></tr>';}).join(""):'<tr><td colspan="6"><div class="empty">조건에 맞는 논술 모집단위가 없습니다.</div></td></tr>';
+    return '<tr'+(x.ce.s==="fail"?' class="blk"':'')+'><td class="l"><button type="button" class="star" data-k="'+r.k+'" aria-pressed="'+on+'" aria-label="목표에 담기">'+(on?"★":"☆")+'</button><span class="u">'+esc(u[0])+'</span> '+esc(r.unit)+'<span class="sub2">'+tag(r)+esc(r.t)+'</span></td><td class="n">'+(r.n27||"–")+'</td><td class="n">'+(r.c27!=null?f1(r.c27):"–")+(r.c26!=null?'<br><span class="d">('+f1(r.c26)+')</span>':"")+'</td><td class="cs">'+esc(r.m||"")+'</td><td class="cs">'+csCell(r,{cs:x.cs,ce:x.ce})+'</td><td class="l">'+me+'</td></tr>';}).join(""):'<tr><td colspan="6"><div class="empty">조건에 맞는 논술 모집단위가 없습니다.</div></td></tr>';
   $("nsnote").textContent=st.typs.indexOf(2)<0?"":"조건에 맞는 "+tot+"곳"+(tot>150?" 중 150곳":"")+". 최저를 맞추는 곳을 먼저, 그 안에서 경쟁률이 낮은 순으로 놓았습니다. 논술 수록 대학은 요강이 정리된 33곳입니다.";
 }
 function renderSix(B,JS){
@@ -1251,8 +1270,8 @@ function renderSix(B,JS){
     if(j>=2)c.sort(function(a,b){return JS[b.k].d-JS[a.k].d;});else c.sort(function(a,b){return a.g70-b.g70;});
     var r=c[0];if(r){used[r.u]=1;pick.push([j,r]);}else pick.push([j,null]);
   });
-  $("six").innerHTML=pick.map(function(p){var j=p[0],r=p[1];if(!r)return '<div class="slot"><span class="pill p-'+JC[j]+'">'+JN[j]+'</span><span class="meta">이 조건에서는 해당 학과가 없습니다.</span></div>';var J=JS[r.k];
-    return '<div class="slot"><div>'+pill(j,false)+' '+tag(r)+'</div><span class="nm">'+esc(UV[r.u][0])+' '+esc(r.unit)+'</span><span class="meta">'+esc(r.t)+'</span><span class="num">컷 '+f2(J.cut5)+' (9등급 '+f2(r.g70)+(r.adj?' 보정':'')+') · 내 '+f2(J.g5)+'</span></div>';}).join("");
+  $("six").innerHTML=pick.map(function(p){var j=p[0],r=p[1];if(!r)return '<div class="slot empty-slot"><span class="pill p-'+JC[j]+'">'+JN[j]+'</span><span class="meta">이 조건에서는 해당 학과가 없습니다.</span></div>';var J=JS[r.k];
+    return '<div class="slot sj'+j+'"><div>'+pill(j,false)+' '+tag(r)+'</div><span class="nm">'+esc(UV[r.u][0])+' '+esc(r.unit)+'</span><span class="meta">'+esc(r.t)+'</span><span class="num">컷 '+f2(J.cut5)+' (9등급 '+f2(r.g70)+(r.adj?' 보정':'')+') · 내 '+f2(J.g5)+'</span></div>';}).join("");
 }
 function targetList(B,JS){
   var T=st.targets.map(function(k){return BYK[k];}).filter(Boolean).filter(function(r){return r.typ!==2;}),auto=false,plus={};
