@@ -282,6 +282,8 @@ td.cs b{font-weight:600}
 .okc{color:var(--safe);font-weight:600}.noc{color:var(--reach);font-weight:600}
 .slot.sj0 .sdup,.slot.sj1 .sdup,.slot.sj0 .sswap,.slot.sj1 .sswap{color:#fff;font-weight:600}
 .slot.sj0 .ttk,.slot.sj1 .ttk{background:#fff;color:#6b3fd1;border:1px solid #fff}
+
+[data-male="1"] [data-v="여대"],[data-male="1"] [data-v="여대만"]{display:none!important}
 [id$="exam"] button.has::after{content:" ●";font-size:9px;vertical-align:2px;color:var(--safe)}
 [id$="exam"] button.has[aria-pressed="true"]::after{color:inherit}
 .tavg{font-size:13.5px;color:var(--ink-2);margin:0 0 10px}.tavg b{font-family:var(--f-mono);color:var(--ink)}
@@ -318,12 +320,14 @@ td.cs b{font-weight:600}
 .tchart .td.est{fill:var(--surface)!important;stroke:var(--ink-3);stroke-dasharray:2 1.5}
 .tcell .th small{font-weight:500;color:var(--ink-3);font-size:11px}
 
+[data-male="1"] [data-v="여대"],[data-male="1"] [data-v="여대만"]{display:none!important}
+
 /* ---- 통합 ---- */
 .modes button{font:inherit;font-size:14px;padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
 .modes button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:600}
 .modes button:hover{border-color:var(--accent);color:var(--accent)}
 .modes button[aria-pressed="true"]:hover{color:var(--surface)}
-.shared{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.4fr) minmax(0,1fr);gap:12px;align-items:end;margin-top:16px}
+.shared{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.4fr) auto auto;gap:12px;align-items:end;margin-top:16px}
 @media (max-width:760px){.shared{grid-template-columns:1fr}}
 .shared .seg.big{grid-template-columns:1fr 1fr}
 .hideshared{display:none!important}
@@ -416,6 +420,8 @@ td.cs b{font-weight:600}
       <div class="seg big" id="sh-grade" role="group" aria-label="학년 선택"><button type="button" data-v="g2">고2<small>2028 대입</small></button><button type="button" data-v="g1">고1<small>2029 대입</small></button></div></div>
     <div><span class="flabel">농어촌 특별전형</span>
       <div class="seg" id="sh-rural" role="group" aria-label="농어촌 해당 여부"><button type="button" data-v="1">해당</button><button type="button" data-v="0">비해당</button></div></div>
+    <div><span class="flabel">성별</span>
+      <div class="seg" id="sh-sex" role="group" aria-label="성별"><button type="button" data-v="m">남</button><button type="button" data-v="f">여</button></div></div>
   </form>
 
   <nav class="modes" id="modes" aria-label="화면 선택" style="margin:16px 0 0"><button type="button" data-v="overview" aria-pressed="true">한눈에</button><button type="button" data-v="susi">수시</button><button type="button" data-v="jungsi">정시</button><a class="guidebtn" href="https://jungsi.allcare-edu.com/ipsi/guide/" target="_blank" rel="noopener">사용설명서</a></nav>
@@ -466,6 +472,11 @@ td.cs b{font-weight:600}
           <div class="seg" id="s-rural" role="group" aria-label="농어촌 해당 여부">
             <button type="button" data-v="1">해당</button>
             <button type="button" data-v="0">비해당</button>
+          </div>
+          <span class="flabel">성별</span>
+          <div class="seg" id="s-sex" role="group" aria-label="성별">
+            <button type="button" data-v="m">남</button>
+            <button type="button" data-v="f">여</button>
           </div>
         </div>
 
@@ -644,6 +655,11 @@ td.cs b{font-weight:600}
           <div class="seg" id="j-rural" role="group" aria-label="농어촌 해당 여부">
             <button type="button" data-v="1">해당</button>
             <button type="button" data-v="0">비해당</button>
+          </div>
+          <span class="flabel">성별</span>
+          <div class="seg" id="j-sex" role="group" aria-label="성별">
+            <button type="button" data-v="m">남</button>
+            <button type="button" data-v="f">여</button>
           </div>
         </div>
 
@@ -897,7 +913,7 @@ $("jf").innerHTML=JUD.map(function(j){return '<button type="button" class="chip"
 var FIELDS=["name","kraw","mraw","eraw","hraw","t1raw","t2raw","kstd","kpct","mstd","mpct","t1std","t1pct","t2std","t2pct","kw","adj"];
 function fill(){
   FIELDS.forEach(function(f){var el=$(f);if(el)el.value=st[f]==null?"":st[f];});
-  segSet("grade",[st.grade]);segSet("exam",[st.exam]);segSet("rural",[String(st.rural)]);segSet("scope",[st.scope]);
+  segSet("grade",[st.grade]);segSet("exam",[st.exam]);segSet("rural",[String(st.rural)]);segSet("sex",[st.sex||""]);segSet("scope",[st.scope]);
   segSet("cats",st.cats);segSet("regs",st.regs.map(String));segSet("jf",st.jf);
 }
 function segSet(id,vals){$(id).querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",vals.indexOf(b.dataset.v)>=0?"true":"false");});}
@@ -905,7 +921,7 @@ FIELDS.forEach(function(f){var el=$(f);if(!el)return;el.addEventListener(el.tagN
   var v=el.value;if(el.type==="number")v=v===""?"":+v;if(f==="adj")v=+v;st[f]=v;isExample=false;stash();save();render();});});
 function single(id,key,num){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;st[key]=num?+b.dataset.v:b.dataset.v;isExample=false;segSet(id,[b.dataset.v]);save();render();});}
 function swSeg(id){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b||b.dataset.v===st[id])return;switchExam(id,b.dataset.v);});}
-swSeg("grade");swSeg("exam");single("rural","rural",true);single("scope","scope");
+swSeg("grade");swSeg("exam");single("rural","rural",true);single("sex","sex");single("scope","scope");
 function multi(id,key,num){$(id).addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var v=num?+b.dataset.v:b.dataset.v;var a=st[key];var i=a.indexOf(v);if(i>=0)a.splice(i,1);else a.push(v);isExample=false;segSet(id,a.map(String));save();render();});}
 multi("cats","cats");
 $("catmode").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;st.catMode=b.dataset.v;isExample=false;save();render();});
@@ -1028,6 +1044,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp
 function candidates(R){
   var kw=(st.kw||"").replace(/\s+/g,"");
   return UNITS.filter(function(x){
+    if(st.sex==="m"&&isWomen(x))return false;
     if(st.regs.length&&st.regs.indexOf(x.reg)<0)return false;
     if(kw){if(x.nm.indexOf(kw)<0&&x.uname.indexOf(kw)<0)return false;}
     else{
@@ -1049,7 +1066,7 @@ function gradeUI(){var g1=st.grade==="g1";document.documentElement.setAttribute(
   $("gb-g").textContent=G;$("h1g").textContent=G;$("gb-t").textContent=G+" 화면 · "+(g1?"2029학년도 수능 (2028. 11월)":"2028학년도 수능 (2027. 11월)");
   $("gb-s").textContent="2026 "+EXAMS[st.exam]+" 학력평가("+G+") 등급컷으로 환산 중";
   var tc=document.querySelector('meta[name="theme-color"]');if(tc)tc.setAttribute("content",g1?"#6A3C9E":"#26398C");}
-function render(){syncCats();catUI();gradeUI();examMarks();
+function render(){syncCats();catUI();gradeUI();examMarks();$("cats").setAttribute("data-male",st.sex==="m"?"1":"0");
   var R=compute();last=R;
   try{renderTrend();}catch(e){console.error(e);}
   // 등급 배지
@@ -1348,7 +1365,7 @@ function judge(r){
 function catOk(r,ignoreMin){
   if(st.partOnly&&!r.part)return false;
   if(!ignoreMin&&!!st.minMark!==hasMin(r))return false;
-  var u=UV[r.u];if(st.regs.length&&st.regs.indexOf(u[1])<0)return false;
+  var u=UV[r.u];if(st.sex==="m"&&u[2])return false;if(st.regs.length&&st.regs.indexOf(u[1])<0)return false;
   var kw=(st.kw||"").trim();
   if(kw){return kw.split(/[\s,]+/).filter(Boolean).some(function(w){return r.unit.indexOf(w)>=0||u[0].indexOf(w)>=0;});}
   var w=st.cats.indexOf("여대만")>=0;
@@ -1464,6 +1481,8 @@ function render(soft){
   $("dday").textContent="D-"+Math.max(0,Math.ceil((dd-new Date())/864e5));
   segSync("grade",function(v){return v===st.grade;});
   segSync("rural",function(v){return +v===+st.rural;});
+  segSync("sex",function(v){return v===st.sex;});
+  $("cats").setAttribute("data-male",st.sex==="m"?"1":"0");
   segSync("typs",function(v){return st.typs.indexOf(+v)>=0;});
   segSync("partf",function(){return !!st.partOnly;});
   segSync("minf",function(){return !!st.minMark;});
@@ -1658,6 +1677,7 @@ function ukey(s){return s.replace(/\s|[()\[\]·,\-]/g,"").replace(/(학과|학�
 segInit("grade",[["g2","고2"],["g1","고1"]],null,function(v){st.grade=v;});
 $("grade").children[0].innerHTML='고2<small>2028 수시</small>';$("grade").children[1].innerHTML='고1<small>2029 수시</small>';$("grade").className="seg big";
 segInit("rural",[["1","해당"],["0","비해당"]],null,function(v){st.rural=+v;});
+segInit("sex",[["m","남"],["f","여"]],null,function(v){st.sex=v;});
 segInit("typs",[[0,"학생부교과"],[1,"학생부종합"],[2,"논술"]],null,function(v){toggle(st.typs,+v);});
 segInit("minf",[["1","★ 최저유무"]],null,function(){st.minMark=!st.minMark;});
 segInit("partf",[["1","<일부반영> 학과만"]],null,function(){st.partOnly=!st.partOnly;});
@@ -1703,7 +1723,7 @@ var $=function(id){return document.getElementById(id);};
 // 앱 안의 공통 입력(이름·학년·농어촌·학년 띠)은 숨기고 위의 공통 입력으로 조작
 ["j","s"].forEach(function(p){
   var n=$(p+"-name");if(n){var lab=n.closest("label");if(lab)lab.classList.add("hideshared");}
-  ["grade","rural"].forEach(function(k){var el=$(p+"-"+k);if(!el)return;el.classList.add("hideshared");var prev=el.previousElementSibling;if(prev&&prev.classList.contains("flabel"))prev.classList.add("hideshared");});
+  ["grade","rural","sex"].forEach(function(k){var el=$(p+"-"+k);if(!el)return;el.classList.add("hideshared");var prev=el.previousElementSibling;if(prev&&prev.classList.contains("flabel"))prev.classList.add("hideshared");});
 });
 function clickSeg(id,v){var el=$(id);if(!el)return;var b=el.querySelector('button[data-v="'+v+'"]');if(b&&b.getAttribute("aria-pressed")!=="true")b.click();}
 function setName(v){["j","s"].forEach(function(p){var n=$(p+"-name");if(n&&n.value!==v){n.value=v;n.dispatchEvent(new Event("input",{bubbles:true}));}});}
@@ -1713,6 +1733,7 @@ function syncShared(){
   if($("sh-name").value!==name)$("sh-name").value=name;
   [].forEach.call($("sh-grade").children,function(b){b.setAttribute("aria-pressed",b.dataset.v===grade?"true":"false");});
   [].forEach.call($("sh-rural").children,function(b){b.setAttribute("aria-pressed",+b.dataset.v===rural?"true":"false");});
+  var sex=J.sex||S.sex||"";[].forEach.call($("sh-sex").children,function(b){b.setAttribute("aria-pressed",b.dataset.v===sex?"true":"false");});
   var g1=grade==="g1";
   $("gb-g").textContent=$("h1g").textContent=g1?"고1":"고2";
   $("gb-t").textContent=g1?"고1 화면 · 2029학년도 대입":"고2 화면 · 2028학년도 대입";
@@ -1726,8 +1747,9 @@ function syncShared(){
 $("sh-name").addEventListener("input",function(e){setName(e.target.value);syncShared();});
 $("sh-grade").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;clickSeg("j-grade",b.dataset.v);clickSeg("s-grade",b.dataset.v);syncShared();});
 $("sh-rural").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;clickSeg("j-rural",b.dataset.v);clickSeg("s-rural",b.dataset.v);syncShared();});
+$("sh-sex").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;clickSeg("j-sex",b.dataset.v);clickSeg("s-sex",b.dataset.v);syncShared();});
 // 처음: 정시 쪽 값을 기준으로 둘을 맞춤
-(function(){var J=window.JUNGSI?window.JUNGSI.get():null;if(!J)return;setName(J.name||"");clickSeg("s-grade",J.grade);clickSeg("s-rural",String(+J.rural));})();
+(function(){var J=window.JUNGSI?window.JUNGSI.get():null;if(!J)return;setName(J.name||"");clickSeg("s-grade",J.grade);clickSeg("s-rural",String(+J.rural));if(J.sex)clickSeg("s-sex",J.sex);})();
 // 한눈에
 function text(id){var el=$(id);return el?el.innerText:"";}
 function subjRow(){var tb=$("j-conv");if(!tb)return "";var out=[];[].forEach.call(tb.querySelectorAll("tr"),function(tr){var c=tr.children;if(c.length<5||tr.classList.contains("tot"))return;var nm=c[0].textContent.trim(),pct=c[3].textContent.trim(),g=c[4].textContent.trim().replace(/[^0-9]/g,"");if(!nm)return;
