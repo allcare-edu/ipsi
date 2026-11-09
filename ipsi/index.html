@@ -327,6 +327,7 @@ td.cs b{font-weight:600}
 .modes button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink);font-weight:600}
 .modes button:hover{border-color:var(--accent);color:var(--accent)}
 .modes button[aria-pressed="true"]:hover{color:var(--surface)}
+[hidden]{display:none!important}
 .shared{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.4fr) auto auto;gap:12px;align-items:end;margin-top:16px}
 @media (max-width:760px){.shared{grid-template-columns:1fr}}
 .shared .seg.big{grid-template-columns:1fr 1fr}
@@ -1814,7 +1815,8 @@ var mo=new MutationObserver(function(){overview();});
 // 탭
 var MODES=["overview","susi","jungsi"];
 function show(m){if(MODES.indexOf(m)<0)m="overview";MODES.forEach(function(x){$("app-"+x).hidden=x!==m;});[].forEach.call($("modes").children,function(b){b.setAttribute("aria-pressed",b.dataset.v===m?"true":"false");});
-  var p=document.querySelector("#app-"+m+" .panel");if(p)p.scrollTop=0;}
+  var p=document.querySelector("#app-"+m+" .panel");if(p)p.scrollTop=0;
+  var nv=$("modes");if(nv&&nv.getBoundingClientRect().top<0)nv.scrollIntoView({block:"start"});}
 $("modes").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;if(location.hash!=="#"+b.dataset.v)location.hash=b.dataset.v;else show(b.dataset.v);});
 window.addEventListener("hashchange",function(){show(location.hash.slice(1));});
 show(location.hash.slice(1));
