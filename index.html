@@ -374,7 +374,7 @@ svg text{font-family:var(--f-body)}
         <details class="ov" style="margin-top:10px"><summary>2028 통합수능 기준으로 바꾼 방법</summary>
           <ul class="note" style="margin:8px 0 0;padding-left:18px;line-height:1.7">
             <li><b>내 점수:</b> 2026년 고1·고2 3·6·9·10월 학력평가 확정 등급컷(EBSi, 등급별 원점수·표준점수·백분위)으로 원점수를 이어 환산합니다. 원점수 등급컷은 기관마다 1점 안팎 다를 수 있으니, 성적표가 있으면 표준점수·백분위를 그대로 넣으세요.</li>
-            <li><b>대학 컷:</b> 대학어디가 2026학년도 정시 합격자 70% 평균백분위(없으면 2025·2024학년도)가 출발점입니다.</li>
+            <li><b>대학 컷:</b> 대학이 공개한 2026학년도 정시 합격자 70% 평균백분위(없으면 2025·2024학년도)가 출발점입니다.</li>
             <li><b>탐구 보정:</b> 지금은 과목마다 응시 집단이 달라, 사탐 합격자는 탐구 백분위가 국어·수학보다 평균 5점 높고 과탐 합격자는 5.5점 낮게 나옵니다(102개 대학 3,260개 학과 분석). 2028에는 모두 같은 통합사회·통합과학을 보므로 학과마다 이 차이를 절반만큼 줄여 컷을 다시 계산했습니다. 인문(사탐)은 평균 0.7 내려가고 자연(과탐)은 1.1 올라갑니다(±2.5 이내).</li>
             <li><b>사라진 규칙:</b> 2028에는 선택과목이 없어 미적분·기하·과탐 지정과 가산점이 없어집니다. 그래서 ‘지원 불가’ 판정도 없습니다.</li>
             <li><b>아직 모르는 것:</b> 2028 모집군·반영비율은 각 대학 2028 요강을 따라야 합니다. 군은 2027 요강 기준으로 보여 줍니다. 서울대 등 일부 대학은 정시에서 학생부 교과평가를 반영합니다.</li>
@@ -403,7 +403,7 @@ svg text{font-family:var(--f-body)}
           <span><span class="pill p-risk">위험</span> −6 미만</span>
         </div>
         <div class="tbl"><table>
-          <thead><tr><th class="l">☆ 대학 · 모집단위</th><th title="2027학년도 모집군">군(27)</th><th>인원</th><th title="최근 공개 70% 컷을 2028 통합탐구 기준으로 환산">일반 70%<br><small>2028 환산</small></th><th id="th-rural">농어촌 70%</th><th title="대학어디가 원자료 일반전형 70% 컷 2026 / 2025 / 2024학년도 (환산 전)">3년 추이<br><small>원자료</small></th><th>영어</th><th>내 점수 − 컷</th><th class="l">판정</th></tr></thead>
+          <thead><tr><th class="l">☆ 대학 · 모집단위</th><th title="2027학년도 모집군">군(27)</th><th>인원</th><th title="최근 공개 70% 컷을 2028 통합탐구 기준으로 환산">일반 70%<br><small>2028 환산</small></th><th id="th-rural">농어촌 70%</th><th title="대학 공개 원자료 일반전형 70% 컷 2026 / 2025 / 2024학년도 (환산 전)">3년 추이<br><small>원자료</small></th><th>영어</th><th>내 점수 − 컷</th><th class="l">판정</th></tr></thead>
           <tbody id="list"></tbody>
         </table></div>
         <p class="note" id="listnote"></p>
@@ -664,7 +664,7 @@ function render(){gradeUI();examMarks();$("cats").setAttribute("data-male",st.se
   h+="<tr><td class='l'>영어 · 한국사</td><td class='n'>"+(st.eraw===""?"—":st.eraw)+" · "+(st.hraw===""?"—":st.hraw)+"</td><td class='n'>—</td><td class='n'>—</td><td>"+(R.eng?"<span class='badge g"+R.eng+"'>"+R.eng+"</span> ":"")+(R.his?"<span class='badge g"+Math.min(R.his,4)+"'>"+R.his+"</span>":"")+"</td><td class='l'><span class='est'>절대평가</span></td></tr>";
   h+="<tr class='tot'><td class='l'>국·수·통합탐구</td><td></td><td class='n'>"+(R.stdSum==null?"—":R.stdSum)+"</td><td class='n'>"+(R.avg==null?"—":f1(R.avg))+"</td><td></td><td class='l'><span class='est'>표점 합 · 백분위 평균"+(+st.adj?" (보정 "+st.adj+")":"")+"</span></td></tr>";
   $("conv").innerHTML=h;
-  $("convnote").textContent=R.E.name+" 확정 등급컷 기준. 백분위 평균 = (국어 + 수학 + (통합사회 + 통합과학) ÷ 2) ÷ 3. 대학어디가 70% 컷과 같은 방식입니다.";
+  $("convnote").textContent=R.E.name+" 확정 등급컷 기준. 백분위 평균 = (국어 + 수학 + (통합사회 + 통합과학) ÷ 2) ÷ 3. 대학이 공개하는 70% 컷과 같은 방식입니다.";
   // 요약
   var nm=st.name?esc(st.name)+" 학생":(isExample?"예시 점수":"이름 없음");
   $("who").innerHTML="<b>"+nm+"</b> · "+"고"+st.grade.slice(1)+" "+EXAMS[st.exam]+" 학평"+" · "+(st.rural?"농어촌 전형 기준":"일반 전형 기준");
