@@ -465,7 +465,9 @@ function hisGrade(r){if(r===""||r==null||isNaN(r))return null;r=+r;var c=[40,35,
 // row: [uIdx, rural, 군, 모집단위, cat, 인원, avg50, avg70, eng70, 탐구유형]
 var UNITS=(function(){
   var m={},order=[];
+  var HIDE_U=["강남대"];
   D.rows.forEach(function(r){
+    if(HIDE_U.indexOf(D.univ[r[0]][0])>=0)return;
     var k=r[0]+"|"+r[3];
     if(!m[k]){m[k]={u:r[0],nm:r[3],cat:r[4],G:[],R:[]};order.push(k);}
     (r[1]?m[k].R:m[k].G).push(r);
