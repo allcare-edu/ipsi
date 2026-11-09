@@ -334,15 +334,15 @@ td.cs b{font-weight:600}
 .ov-head a:hover{text-decoration:underline}
 .ovkv{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;margin-bottom:12px;align-items:stretch}
 .ovkv .ovadv{grid-column:1/-1}
-.ovsign{display:grid;place-items:center;align-content:center;gap:8px;min-width:96px}
-.ovsign .sg{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-size:34px;font-weight:700;line-height:1;background:#0E7A5F;color:#fff;box-shadow:var(--shadow)}
-.ovsign .sg.q{background:var(--surface-2);color:var(--ink-3);font-size:26px}
-.ovsign small{font-size:19px;font-weight:700;color:#0E7A5F;white-space:nowrap;font-family:var(--f-display)}
+.ovsign{display:grid;place-items:center;align-content:center;gap:10px;min-width:140px}
+.ovsign .sg{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-mono);font-size:51px;font-weight:700;line-height:1;background:#0E7A5F;color:#fff;box-shadow:var(--shadow)}
+.ovsign .sg.q{background:var(--surface-2);color:var(--ink-3);font-size:39px}
+.ovsign small{font-size:24px;font-weight:700;color:#0E7A5F;white-space:nowrap;font-family:var(--f-display)}
 .ovsign .sgm{display:none}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ovsign small{color:#5CCAA9}}:root[data-theme="dark"] .ovsign small{color:#5CCAA9}
 @media (max-width:640px){.ovkv{grid-template-columns:1fr}
   .ovsign{grid-template-columns:auto auto;justify-content:center;gap:10px}
-  .ovsign .sg{display:none}.ovsign .sgm{display:inline-block;font-size:17px;font-weight:700;background:#0E7A5F;color:#fff;border-radius:999px;padding:6px 18px}
+  .ovsign .sg{display:none}.ovsign .sgm{display:inline-block;font-size:24px;font-weight:700;background:#0E7A5F;color:#fff;border-radius:999px;padding:8px 22px}
   .ovsign small{font-size:20px}}
 .ovadv{display:grid;gap:10px;align-content:start;min-width:0;padding:12px 14px;border:2px solid var(--accent);border-radius:12px;background:var(--accent-soft)}
 .ovadv h3{margin:0;font-family:var(--f-display);font-size:17px;color:var(--accent)}
@@ -379,6 +379,7 @@ td.cs b{font-weight:600}
 .ovbox b{font-family:var(--f-mono);font-size:19px;font-variant-numeric:tabular-nums}
 .ovbox .counts{margin-top:6px}
 .ovbox small{font-size:11px;color:var(--ink-3);font-family:var(--f-body)}
+.ovbox b.kvn{font-size:34px;line-height:1.15}
 .subjrow{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:4px}
 .sj{display:inline-flex;align-items:center;gap:5px;font-size:12.5px}
 .sj em{font-style:normal;color:var(--ink-2)}
@@ -1779,10 +1780,10 @@ function overview(){
   var a5=avg?avg.firstChild.textContent:"–",a9=avg9?(avg9.textContent.match(/약 ([\d.]+)/)||[])[1]:null,ja=javg?javg.firstChild.textContent:"–";
   var exam=J&&J.exam?({mar:"3월",jun:"6월",sep:"9월",oct:"10월"})[J.exam]:"";
   var ADV=null;try{ADV=window.SUSI&&window.SUSI.advice?window.SUSI.advice():null;}catch(e){ADV=null;}
-  $("ov-kv").innerHTML='<div class="ovcol"><h3>수시</h3><div class="ovbox"><span>내신 (5등급제 · 국영수사)</span><b>'+a5+'</b> <small>9등급 약 '+(a9||"–")+'</small></div>'+
+  $("ov-kv").innerHTML='<div class="ovcol"><h3>수시</h3><div class="ovbox"><span>내신 (5등급제 · 국영수사)</span><b class="kvn">'+a5+'</b> <small>9등급 약 '+(a9||"–")+'</small></div>'+
     '<div class="ovbox"><span>판정 분포</span><div class="counts">'+(sc?sc.innerHTML:"")+'</div></div></div>'+
     signHtml(ADV)+
-    '<div class="ovcol"><h3>정시</h3><div class="ovbox"><span>국·수·탐 백분위 평균 ('+exam+' 학평'+(J&&+J.adj?" · 보정 "+J.adj:"")+')</span><b>'+ja+'</b></div>'+
+    '<div class="ovcol"><h3>정시</h3><div class="ovbox"><span>국·수·탐 백분위 평균 ('+exam+' 학평'+(J&&+J.adj?" · 보정 "+J.adj:"")+')</span><b class="kvn">'+ja+'</b></div>'+
     '<div class="ovbox"><span>과목별 등급 · 백분위</span><div class="subjrow">'+subjRow()+'</div></div>'+
     '<div class="ovbox"><span>판정 분포</span><div class="counts">'+(jc?jc.innerHTML:"")+'</div></div></div>'+advHtml(ADV);
 }
