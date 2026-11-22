@@ -71,7 +71,7 @@ details.uni>summary::-webkit-details-marker{display:none}
 details.uni>summary h3{font-family:var(--f-display);font-size:19px;margin:0}
 details.uni>summary .f{font-size:12.5px;color:var(--ink-3);flex-basis:100%}
 details.uni .in{padding:0 16px 16px}
-tr.past td,tr.past td b{text-decoration:line-through;color:var(--ink-3);font-weight:400}.adv{margin:0;padding-left:22px;display:grid;gap:10px;line-height:1.65;font-size:14.5px;max-width:86ch}.chk{list-style:none;margin:0;padding:0;display:grid;gap:2px}.chk label{display:flex;gap:10px;align-items:flex-start;padding:10px 8px;border-radius:8px;cursor:pointer;line-height:1.6;font-size:14.5px}.chk label:hover{background:var(--surface-2)}.chk input{width:18px;height:18px;margin:3px 0 0;flex:none;accent-color:var(--accent,#26398C)}.chk input:checked+span{color:var(--ink-3)}.chk li+li{border-top:1px solid var(--line)}
+tr.past td,tr.past td b{text-decoration:line-through;color:var(--ink-3);font-weight:400}.adv{margin:0;padding-left:22px;display:grid;gap:10px;line-height:1.65;font-size:14.5px;max-width:86ch}.calnext{margin:0 0 10px;font-size:15px;line-height:1.5}.calnext b{color:var(--accent)}.cal{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(104px,1fr);gap:8px;overflow-x:auto;padding:2px 2px 6px;min-width:0}.cd{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface);min-width:0}.cd .m{display:flex;justify-content:space-between;gap:6px;background:var(--surface-2);color:var(--ink-2);font-size:11.5px;font-weight:600;padding:4px 8px;white-space:nowrap}.cd .m i{font-style:normal;font-family:var(--f-mono)}.cd .d{font-family:var(--f-mono);font-size:19px;font-weight:600;padding:7px 8px 0;white-space:nowrap}.cd .d small{font-size:11.5px;font-weight:400;color:var(--ink-3);font-family:var(--f-body,inherit)}.cd .t{font-size:12.5px;line-height:1.45;color:var(--ink-2);padding:3px 8px 9px}.cd.next{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}.cd.next .m,.cd.now .m{background:var(--accent);color:#fff}.cd.past{opacity:.6}.cd.past .d,.cd.past .t{text-decoration:line-through}.chk{list-style:none;margin:0;padding:0;display:grid;gap:2px}.chk label{display:flex;gap:10px;align-items:flex-start;padding:10px 8px;border-radius:8px;cursor:pointer;line-height:1.6;font-size:14.5px}.chk label:hover{background:var(--surface-2)}.chk input{width:18px;height:18px;margin:3px 0 0;flex:none;accent-color:var(--accent,#26398C)}.chk input:checked+span{color:var(--ink-3)}.chk li+li{border-top:1px solid var(--line)}
 .note{font-size:12.5px;color:var(--ink-3);margin:8px 0 0;line-height:1.6;max-width:92ch}
 .unirow{cursor:pointer}.unirow:hover td{background:var(--surface-2)}
 .tab{display:grid;gap:16px;min-width:0}.tab[hidden]{display:none}
@@ -91,6 +91,12 @@ footer img{height:20px}
     <p class="sub">대학마다 2027 정시 요강의 반영비율·영어 등급 점수·가산점·한국사를 넣어 환산점수를 계산하고, 작년 합격자 70% 선의 성적을 같은 식으로 환산한 점수와 비교합니다. 대학 범위(주요 15개 대학 · 수도권 주요 대학 · 주요 여대 · 지거국)를 골라 볼 수 있습니다. 일반전형 기준입니다.</p>
   </header>
 
+  <section class="card" aria-labelledby="h-cal">
+    <h2 id="h-cal">입시 일정</h2>
+    <p class="calnext" id="calnext"></p>
+    <div class="cal" id="cal"></div>
+    <p class="note">2027학년도 대학입학전형 기본 일정입니다. 지난 일정은 줄을 그어 표시합니다. 대학별 날짜와 시간은 각 대학 요강에서 확인하세요.</p>
+  </section>
   <section class="card" aria-labelledby="h-in">
     <h2 id="h-in">성적 입력</h2>
     <div class="seg" id="exam" role="group" aria-label="시험">
@@ -165,25 +171,6 @@ footer img{height:20px}
       <li><label><input type="checkbox" data-k="c9"><span><b>최종 모집인원은 1월 3일까지 나옵니다.</b> 수시에서 못 뽑은 인원이 정시로 넘어옵니다. 원서를 쓰기 전에 대학 홈페이지에서 최종 인원과 요강을 다시 확인하세요.</span></label></li>
       <li><label><input type="checkbox" data-k="c10"><span><b>원서 마감일과 시간은 대학마다 다릅니다.</b> 마감 직전 경쟁률만 보고 급하게 바꾸지 말고, 정해 둔 조합 안에서 움직이세요.</span></label></li>
     </ul>
-  </section>
-  <section class="card" aria-labelledby="h-sch">
-    <h2 id="h-sch">남은 일정</h2>
-    <div class="tbl"><table>
-      <thead><tr><th class="l">날짜</th><th class="l">내용</th></tr></thead>
-      <tbody>
-        <tr data-end="2026-12-11"><td class="l w"><b>12월 11일(금)</b></td><td class="l w">수능 성적 통지</td></tr>
-        <tr data-end="2026-12-18"><td class="l w"><b>12월 18일(금)까지</b></td><td class="l w">수시 합격자 발표</td></tr>
-        <tr data-end="2026-12-23"><td class="l w"><b>12월 21~23일</b></td><td class="l w">수시 합격자 등록</td></tr>
-        <tr data-end="2026-12-29"><td class="l w"><b>12월 24~29일</b></td><td class="l w">수시 추가 합격 통보 (29일 18시 마감). 전화로 오니 모르는 번호도 받으세요.</td></tr>
-        <tr data-end="2027-01-03"><td class="l w"><b>12월 30일~1월 3일</b></td><td class="l w">대학별 정시 최종 모집인원 발표</td></tr>
-        <tr data-end="2027-01-07"><td class="l w"><b>1월 4~7일</b></td><td class="l w">정시 원서접수 (대학별로 이 가운데 3일 이상)</td></tr>
-        <tr data-end="2027-01-31"><td class="l w"><b>1월 11~31일</b></td><td class="l w">전형 기간 (가군 11~17일, 나군 18~24일, 다군 25~31일)</td></tr>
-        <tr data-end="2027-02-05"><td class="l w"><b>2월 5일(금)까지</b></td><td class="l w">정시 합격자 발표</td></tr>
-        <tr data-end="2027-02-12"><td class="l w"><b>2월 10~12일</b></td><td class="l w">정시 합격자 등록</td></tr>
-        <tr data-end="2027-02-17"><td class="l w"><b>2월 13~17일</b></td><td class="l w">정시 추가 합격 통보 (17일 18시 마감)</td></tr>
-      </tbody>
-    </table></div>
-    <p class="note">지난 일정은 줄을 그어 표시합니다. 2027학년도 대학입학전형 기본 일정입니다. 대학별 날짜와 시간은 각 대학 요강에서 확인하세요.</p>
   </section>
   </div>
   <div id="tab-univ" class="tab">
@@ -538,7 +525,15 @@ $("cats").innerHTML=CATS.map(function(c){return '<button type="button" data-v="'
 var FIELDS=["ksel","kraw","msel","mraw","eraw","hraw","t1sel","t1raw","t2sel","t2raw","kstd","kpct","mstd","mpct","t1std","t1pct","t2std","t2pct"];
 function segSet(id,v){$(id).querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.v===String(v)?"true":"false");});}
 $("grp").innerHTML=D.grp.map(function(g){return '<button type="button" data-v="'+g[0]+'">'+g[1]+"</button>";}).join("");
-function schMark(){var d=new Date(),t=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);document.querySelectorAll("tr[data-end]").forEach(function(r){r.classList.toggle("past",t>r.dataset.end);});}
+var SCH=[["2026-12-11","2026-12-11","수능 성적 통지"],["2026-12-18","2026-12-18","수시 합격자 발표 마감"],["2026-12-21","2026-12-23","수시 합격자 등록"],["2026-12-24","2026-12-29","수시 추가 합격 통보"],["2026-12-30","2027-01-03","정시 최종 모집인원 발표"],["2027-01-04","2027-01-07","정시 원서접수"],["2027-01-11","2027-01-31","정시 전형 기간"],["2027-02-05","2027-02-05","정시 합격자 발표 마감"],["2027-02-10","2027-02-12","정시 합격자 등록"],["2027-02-13","2027-02-17","정시 추가 합격 통보"]];
+function calDraw(){var n=new Date(),t0=new Date(n.getFullYear(),n.getMonth(),n.getDate()),W="일월화수목금토",nx=-1;function D(s){var a=s.split("-");return new Date(+a[0],a[1]-1,+a[2]);}function df(d){return Math.round((d-t0)/864e5);}
+  var h=SCH.map(function(r,i){var s=D(r[0]),e=D(r[1]),a=df(s),b=df(e),cls=b<0?"past":a<=0?"now":"",bd=b<0?"지남":a<=0?(b===0?"오늘":"진행 중"):"D-"+a;if(!cls&&nx<0){nx=i;cls="next";}if(cls==="now"&&nx<0)nx=i;
+    var one=r[0]===r[1],day=one?(s.getDate()+" <small>"+W[s.getDay()]+"요일</small>"):(s.getMonth()===e.getMonth()?s.getDate()+"~"+e.getDate():s.getDate()+"~"+(e.getMonth()+1)+"/"+e.getDate());
+    return "<div class='cd "+cls+"'><div class='m'><span>"+(s.getMonth()+1)+"월</span><i>"+bd+"</i></div><div class='d'>"+day+"</div><div class='t'>"+r[2]+"</div></div>";}).join("");
+  $("cal").innerHTML=h;var c=$("cal").children[nx];if(c)$("cal").scrollLeft=Math.max(0,c.offsetLeft-$("cal").offsetLeft-8);
+  if(nx<0){$("calnext").textContent="2027학년도 정시 일정이 모두 끝났습니다.";return;}var r=SCH[nx],a=df(D(r[0])),b=df(D(r[1]));
+  $("calnext").innerHTML=a>0?"다음 일정은 <b>"+esc(r[2])+"</b>입니다. <b>"+a+"일</b> 남았습니다.":b===0?(a<0?"오늘이 <b>"+esc(r[2])+"</b> 마지막 날입니다.":"오늘은 <b>"+esc(r[2])+"</b> 날입니다."):"지금은 <b>"+esc(r[2])+"</b> 기간입니다. 마감까지 <b>"+b+"일</b> 남았습니다.";}
+function schMark(){calDraw();var d=new Date(),t=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);document.querySelectorAll("tr[data-end]").forEach(function(r){r.classList.toggle("past",t>r.dataset.end);});}
 function chkFill(){schMark();var c=st.chk||{};$("chk").querySelectorAll("input").forEach(function(i){i.checked=!!c[i.dataset.k];});}
 $("chk").addEventListener("change",function(e){var i=e.target;if(!i.dataset||!i.dataset.k)return;st.chk=st.chk||{};st.chk[i.dataset.k]=i.checked;save();});
 function fill(){chkFill();FIELDS.forEach(function(f){$(f).value=st[f]==null?"":st[f];});segSet("exam",st.exam);segSet("cats",st.cat);segSet("grp",st.grp||"top");segSet("tabs",st.tab||"univ");$("memo").value=st.memo||"";}
