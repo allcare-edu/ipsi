@@ -1,2 +1,13 @@
-https://susi.allcare-edu.com/*  https://jungsi.allcare-edu.com/susi/  301!
-http://susi.allcare-edu.com/*  https://jungsi.allcare-edu.com/susi/  301!
+# ─────────────────────────────────────────────────────────────
+# 이 파일은 비워 두었습니다 (2026-11-22). 아무 동작도 하지 않습니다.
+#
+# 이 폴더(배포용_2028)는 GitHub 저장소 allcare-edu/ipsi 의 gh-pages 브랜치에만 올립니다.
+#   → https://jungsi.allcare-edu.com
+# Netlify에 끌어다 놓지 마세요. 학원 Netlify에는 info.allcare-edu.com(예비고1 입시설명회)이
+# 붙어 있어서, 이 폴더를 올리면 설명회 화면이 정시 시뮬레이터로 덮어써집니다.
+# (2026-11-22에 실제로 그런 사고가 났습니다.)
+#
+# 예전 내용(susi.allcare-edu.com 넘기기, /m/ 짧은 주소)은 쓰이지 않습니다.
+#   - susi.allcare-edu.com 은 연결이 끊긴 주소입니다.
+#   - /m/ 짧은 주소는 이 폴더의 m/ 하위 폴더가 GitHub에서 처리합니다.
+# ─────────────────────────────────────────────────────────────
