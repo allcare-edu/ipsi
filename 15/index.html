@@ -71,6 +71,7 @@ details.uni>summary::-webkit-details-marker{display:none}
 details.uni>summary h3{font-family:var(--f-display);font-size:19px;margin:0}
 details.uni>summary .f{font-size:12.5px;color:var(--ink-3);flex-basis:100%}
 details.uni .in{padding:0 16px 16px}
+tr.past td,tr.past td b{text-decoration:line-through;color:var(--ink-3);font-weight:400}.adv{margin:0;padding-left:22px;display:grid;gap:10px;line-height:1.65;font-size:14.5px;max-width:86ch}.chk{list-style:none;margin:0;padding:0;display:grid;gap:2px}.chk label{display:flex;gap:10px;align-items:flex-start;padding:10px 8px;border-radius:8px;cursor:pointer;line-height:1.6;font-size:14.5px}.chk label:hover{background:var(--surface-2)}.chk input{width:18px;height:18px;margin:3px 0 0;flex:none;accent-color:var(--accent,#26398C)}.chk input:checked+span{color:var(--ink-3)}.chk li+li{border-top:1px solid var(--line)}
 .note{font-size:12.5px;color:var(--ink-3);margin:8px 0 0;line-height:1.6;max-width:92ch}
 .unirow{cursor:pointer}.unirow:hover td{background:var(--surface-2)}
 .tab{display:grid;gap:16px;min-width:0}.tab[hidden]{display:none}
@@ -117,7 +118,7 @@ footer img{height:20px}
     <p class="note" id="innote"></p>
   </section>
 
-  <div class="seg tabs" id="tabs" role="tablist" aria-label="화면"><button type="button" data-v="univ">대학별 환산</button><button type="button" data-v="cut">과목별 등급컷 · 분석</button></div>
+  <div class="seg tabs" id="tabs" role="tablist" aria-label="화면"><button type="button" data-v="univ">대학별 환산</button><button type="button" data-v="cut">과목별 등급컷 · 분석</button><button type="button" data-v="chk">체크리스트</button></div>
 
   <div id="tab-cut" class="tab" hidden>
     <section class="card" aria-labelledby="h-my">
@@ -138,6 +139,53 @@ footer img{height:20px}
     </section>
   </div>
 
+  <div id="tab-chk" class="tab" hidden>
+  <section class="card" aria-labelledby="h-adv">
+    <h2 id="h-adv">재수생 정시원서 300장 넘게 써본 전문가의 조언</h2>
+    <ol class="adv">
+      <li><b>입시 컨설팅은 가지 마세요.</b> 어차피 그 사람들도 진학사 모의지원 결과로 컨설팅합니다. 저도 내부(이**) 자료를 모두 참고했지만, 결국 합불 결과를 보면 진학사가 가장 정확했습니다. 이유는 명확합니다. 수능 점수가 정해진 지금 가장 중요한 변수는 경쟁률이기 때문입니다. <b>진학사 모의지원은 반드시 하십시오.</b></li>
+      <li><b>아이가 수시 면접·논술에 갈지 말지부터 정하세요.</b> 지금 가장 중요한 결정입니다. 정시로 어디에 갈 수 있는지는 아직 정확히 나오지 않습니다.</li>
+      <li><b>아이와 재수를 할지 말지를 시간을 두고 천천히 이야기하세요.</b> 그 결정에 따라 원서 전략이 달라집니다.</li>
+      <li><b>올해 수능을 망쳐서 재수를 어느 정도 결심했더라도, 아이를 놀게 하지 마십시오.</b> 힘들고 고통스럽더라도 올해 대학을 간다는 생각으로 정시 지원 과정을 끝까지 경험하게 하십시오. 그래야 아이가 재수를 할 때 정말 열심히 공부합니다.</li>
+      <li><b>지금은 기다리는 것이 맞습니다.</b> 지금 나온 배치표는 보수적으로 잡혀 있어서 시간을 두고 지켜봐야 합니다. 대학별 탐구 변환표준점수도 나온 뒤에 따져 봐야 합니다.</li>
+    </ol>
+  </section>
+  <section class="card" aria-labelledby="h-chk">
+    <h2 id="h-chk">정시 원서 체크리스트</h2>
+    <p class="note" style="margin:0 0 10px">수능을 본 고3 자녀의 원서를 쓰기 전에 학부모가 확인할 것을 모았습니다. 확인한 항목은 눌러서 표시해 두세요. 표시는 이 기기에만 저장됩니다.</p>
+    <ul class="chk" id="chk">
+      <li><label><input type="checkbox" data-k="c1"><span><b>수시에 합격하면 정시에 지원할 수 없습니다.</b> 추가 합격도 같고, 등록하지 않아도 지원 자격이 없어집니다. 가채점이 잘 나왔다면 남은 논술·면접에 갈지부터 정하세요.</span></label></li>
+      <li><label><input type="checkbox" data-k="c2"><span><b>가채점 등급은 확정이 아닙니다.</b> 입시기관마다 등급컷이 1~2점씩 다릅니다. 수능 최저가 등급 경계에 걸려 있으면 대학별고사에 응시하는 쪽이 안전합니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c3"><span><b>원점수 합이 아니라 대학별 환산점수로 봅니다.</b> 국어·수학 반영비율, 영어 등급 점수, 탐구 가산점에 따라 같은 점수도 대학마다 유불리가 다릅니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c4"><span><b>배치표는 두세 곳을 함께 봅니다.</b> 같은 학과도 기관에 따라 예상 점수가 10점까지 차이 납니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c5"><span><b>작년 70% 선은 안전선이 아닙니다.</b> 등록자 가운데 아래에서 30% 지점의 점수입니다. 올해는 국어가 쉬워 원점수 합격선이 오를 것으로 예상되고, 모집군이나 반영비율이 바뀐 대학도 있습니다. 이 시뮬레이터의 판정도 입시기관 배치표보다 후하게 나옵니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c6"><span><b>가·나·다군 조합으로 짭니다.</b> 군마다 한 곳씩 세 번입니다. 안정·적정·소신을 하나씩 두는 것이 기본이고, 다군은 뽑는 대학이 적어 합격선이 높습니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c7"><span><b>수능 말고 보는 것이 있는지 확인합니다.</b> 서울대 교과평가, 연세대 학생부 50점, 한양대 학생부종합평가 10%, 중앙대 출결처럼 정시에도 학생부를 보는 대학이 있습니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c8"><span><b>지정과목과 가산점을 확인합니다.</b> 미적분·기하나 과탐을 지정한 학과는 지원 자체가 안 될 수 있고, 가산점이 있는 학과는 사탐·확통 응시자가 불리합니다.</span></label></li>
+      <li><label><input type="checkbox" data-k="c9"><span><b>최종 모집인원은 1월 3일까지 나옵니다.</b> 수시에서 못 뽑은 인원이 정시로 넘어옵니다. 원서를 쓰기 전에 대학 홈페이지에서 최종 인원과 요강을 다시 확인하세요.</span></label></li>
+      <li><label><input type="checkbox" data-k="c10"><span><b>원서 마감일과 시간은 대학마다 다릅니다.</b> 마감 직전 경쟁률만 보고 급하게 바꾸지 말고, 정해 둔 조합 안에서 움직이세요.</span></label></li>
+    </ul>
+  </section>
+  <section class="card" aria-labelledby="h-sch">
+    <h2 id="h-sch">남은 일정</h2>
+    <div class="tbl"><table>
+      <thead><tr><th class="l">날짜</th><th class="l">내용</th></tr></thead>
+      <tbody>
+        <tr data-end="2026-12-11"><td class="l w"><b>12월 11일(금)</b></td><td class="l w">수능 성적 통지</td></tr>
+        <tr data-end="2026-12-18"><td class="l w"><b>12월 18일(금)까지</b></td><td class="l w">수시 합격자 발표</td></tr>
+        <tr data-end="2026-12-23"><td class="l w"><b>12월 21~23일</b></td><td class="l w">수시 합격자 등록</td></tr>
+        <tr data-end="2026-12-29"><td class="l w"><b>12월 24~29일</b></td><td class="l w">수시 추가 합격 통보 (29일 18시 마감). 전화로 오니 모르는 번호도 받으세요.</td></tr>
+        <tr data-end="2027-01-03"><td class="l w"><b>12월 30일~1월 3일</b></td><td class="l w">대학별 정시 최종 모집인원 발표</td></tr>
+        <tr data-end="2027-01-07"><td class="l w"><b>1월 4~7일</b></td><td class="l w">정시 원서접수 (대학별로 이 가운데 3일 이상)</td></tr>
+        <tr data-end="2027-01-31"><td class="l w"><b>1월 11~31일</b></td><td class="l w">전형 기간 (가군 11~17일, 나군 18~24일, 다군 25~31일)</td></tr>
+        <tr data-end="2027-02-05"><td class="l w"><b>2월 5일(금)까지</b></td><td class="l w">정시 합격자 발표</td></tr>
+        <tr data-end="2027-02-12"><td class="l w"><b>2월 10~12일</b></td><td class="l w">정시 합격자 등록</td></tr>
+        <tr data-end="2027-02-17"><td class="l w"><b>2월 13~17일</b></td><td class="l w">정시 추가 합격 통보 (17일 18시 마감)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">지난 일정은 줄을 그어 표시합니다. 2027학년도 대학입학전형 기본 일정입니다. 대학별 날짜와 시간은 각 대학 요강에서 확인하세요.</p>
+  </section>
+  </div>
   <div id="tab-univ" class="tab">
   <section class="card" aria-labelledby="h-sum">
     <h2 id="h-sum">대학별 한눈에</h2>
@@ -490,7 +538,10 @@ $("cats").innerHTML=CATS.map(function(c){return '<button type="button" data-v="'
 var FIELDS=["ksel","kraw","msel","mraw","eraw","hraw","t1sel","t1raw","t2sel","t2raw","kstd","kpct","mstd","mpct","t1std","t1pct","t2std","t2pct"];
 function segSet(id,v){$(id).querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.v===String(v)?"true":"false");});}
 $("grp").innerHTML=D.grp.map(function(g){return '<button type="button" data-v="'+g[0]+'">'+g[1]+"</button>";}).join("");
-function fill(){FIELDS.forEach(function(f){$(f).value=st[f]==null?"":st[f];});segSet("exam",st.exam);segSet("cats",st.cat);segSet("grp",st.grp||"top");segSet("tabs",st.tab||"univ");$("memo").value=st.memo||"";}
+function schMark(){var d=new Date(),t=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);document.querySelectorAll("tr[data-end]").forEach(function(r){r.classList.toggle("past",t>r.dataset.end);});}
+function chkFill(){schMark();var c=st.chk||{};$("chk").querySelectorAll("input").forEach(function(i){i.checked=!!c[i.dataset.k];});}
+$("chk").addEventListener("change",function(e){var i=e.target;if(!i.dataset||!i.dataset.k)return;st.chk=st.chk||{};st.chk[i.dataset.k]=i.checked;save();});
+function fill(){chkFill();FIELDS.forEach(function(f){$(f).value=st[f]==null?"":st[f];});segSet("exam",st.exam);segSet("cats",st.cat);segSet("grp",st.grp||"top");segSet("tabs",st.tab||"univ");$("memo").value=st.memo||"";}
 $("memo").addEventListener("input",function(){st.memo=$("memo").value;save();});
 function gradeByRaw(t,raw){for(var i=0;i<t.cuts.length;i++)if(t.cuts[i]&&raw>=t.cuts[i][0])return i+1;return 9;}
 function n1(v){return (Math.round(v*10)/10).toString();}
@@ -548,7 +599,7 @@ function render(){
   var S=ok?{K:k.std,M:m.std,kp:k.pct,mp:m.pct,t:[{pct:t1.pct,std:t1.std,sci:SCI.indexOf(st.t1sel)>=0?1:0,ii:/Ⅱ/.test(st.t1sel)},{pct:t2.pct,std:t2.std,sci:SCI.indexOf(st.t2sel)>=0?1:0,ii:/Ⅱ/.test(st.t2sel)}],eng:eg,his:hg,calc:st.msel!=="pr",mi:st.msel==="ca"}:null;
   if(S)S.avg=(k.pct+m.pct+(t1.pct+t2.pct)/2)/3;
   $("kv").innerHTML=[["국어",ok?k.std+" / "+k.pct:"—"],["수학",ok?m.std+" / "+m.pct:"—"],[st.t1sel,ok?t1.std+" / "+t1.pct:"—"],[st.t2sel,ok?t2.std+" / "+t2.pct:"—"],["영어 · 한국사",eg+"등급 · "+hg+"등급"],["표점 합 · 백분위 평균",ok?(k.std+m.std+t1.std+t2.std)+" · "+f1(S.avg):"—"]].map(function(p){return "<div><span>"+esc(p[0])+(p[0].length<6&&p[0]!=="영어 · 한국사"?" 표점 / 백분위":"")+"</span><b>"+p[1]+"</b></div>";}).join("");
-  var tb=st.tab==="cut"?"cut":"univ";$("tab-univ").hidden=tb!=="univ";$("tab-cut").hidden=tb!=="cut";
+  var tb=st.tab==="cut"||st.tab==="chk"?st.tab:"univ";$("tab-univ").hidden=tb!=="univ";$("tab-cut").hidden=tb!=="cut";$("tab-chk").hidden=tb!=="chk";
   renderCut(k,m,t1,t2,eg,hg);
   $("innote").textContent=E.name+" 기준 환산."+(S?"":" 국어·수학·탐구 2과목 점수를 넣으면 대학별 환산 결과가 나옵니다. 영어를 비우면 2등급, 한국사를 비우면 1등급으로 계산합니다.")+" 넣은 점수는 이 기기에만 저장됩니다.";
   if(!S){$("ubtn").innerHTML="";$("gbtn").innerHTML="";$("sum").innerHTML="<tr><td class='l est' colspan='6'>위에 점수를 넣어 주세요.</td></tr>";$("unis").innerHTML="";$("gun").innerHTML="";return;}
